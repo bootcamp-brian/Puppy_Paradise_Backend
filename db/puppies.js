@@ -15,8 +15,9 @@ async function createPuppy({
 }) {
     try{
         const { rows: [ puppy ] } = await client.query(`
-            INSERT INTO puppies(name, description, breed, weight, size, pedigree, isVaccinated, isNeutered, gender, isAvailable, price)
+            INSERT INTO puppies(name, description, breed, weight, size, pedigree, "isVaccinated", "isNeutered", gender, "isAvailable", price)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            ON CONFLICT (name) DO NOTHING
             RETURNING *;
         `, [name, description, breed, weight, size, pedigree, isVaccinated, isNeutered, gender, isAvailable, price])
     
@@ -82,8 +83,6 @@ async function deletePuppy(id) {
             DELETE FROM puppies
             WHERE "puppyId"=$1;
         `, [id])
-
-    //may also include funtionality for deleting puppy from other carts
 
     } catch (error) {
         console.error(error)

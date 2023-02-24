@@ -10,7 +10,8 @@ async function addShippingAddress({
     try{
         const { rows: [shippingAddress] } = await client.query(`
             INSERT INTO shippingAddresses("userId", street, city, state, zip)
-            VALUES ($1, $2, $3, $4, $5)        
+            VALUES ($1, $2, $3, $4, $5)   
+            ON CONFLICT ("userId") DO NOTHING     
             RETURNING *;
         `, [userId, street, city, state, zip])
 
@@ -30,7 +31,8 @@ async function addBillingAddress({
     try{
         const { rows: [billingAddress] } = await client.query(`
             INSERT INTO billingAddresses("userId", street, city, state, zip)
-            VALUES ($1, $2, $3, $4, $5)        
+            VALUES ($1, $2, $3, $4, $5)  
+            ON CONFLICT ("userId") DO NOTHING      
             RETURNING *;
         `, [userId, street, city, state, zip])
 
