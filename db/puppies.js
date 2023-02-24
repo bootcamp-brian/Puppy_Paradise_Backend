@@ -80,8 +80,9 @@ async function updatePuppy({ id, ...fields }) {
 async function deletePuppy(id) {
     try{
         await client.query(`
-            DELETE FROM puppies
-            WHERE "puppyId"=$1;
+            UPDATE puppies
+            SET "isAvailable"=${false}
+            WHERE "id"=$1;
         `, [id])
 
     } catch (error) {

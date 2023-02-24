@@ -43,13 +43,8 @@ async function getAllUsers() {
 }
 
 async function getUser({ 
-  firstName,
-  lastName,
-  password,
-  phone,
   email,
-  isActive,
-  isAdmin 
+  password
 }) {
   try{
     const user = await getUserByEmail(email);
@@ -125,8 +120,9 @@ async function updateUser({ id, ...fields }) {
 async function deleteUser(id) {
   try{
       await client.query(`
-          DELETE FROM users
-          WHERE "userId"=$1;
+          UPDATE users
+          SET "isActive"=${false}
+          WHERE "id"=$1;
       `, [id])
   } catch (error) {
       console.error(error)

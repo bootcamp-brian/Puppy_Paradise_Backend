@@ -8,14 +8,14 @@ async function addShippingAddress({
     zip
 }) {
     try{
-        const { rows: [shippingAddress] } = await client.query(`
-            INSERT INTO shippingAddresses("userId", street, city, state, zip)
+        const { rows: [shipping_address] } = await client.query(`
+            INSERT INTO shipping_addresses("userId", street, city, state, zip)
             VALUES ($1, $2, $3, $4, $5)   
             ON CONFLICT ("userId") DO NOTHING     
             RETURNING *;
         `, [userId, street, city, state, zip])
 
-        return shippingAddress;
+        return shipping_address;
     } catch (error) {
         console.error(error)
     }
@@ -29,14 +29,14 @@ async function addBillingAddress({
     zip
 }) {
     try{
-        const { rows: [billingAddress] } = await client.query(`
-            INSERT INTO billingAddresses("userId", street, city, state, zip)
+        const { rows: [billing_address] } = await client.query(`
+            INSERT INTO billing_addresses("userId", street, city, state, zip)
             VALUES ($1, $2, $3, $4, $5)  
             ON CONFLICT ("userId") DO NOTHING      
             RETURNING *;
         `, [userId, street, city, state, zip])
 
-        return billingAddress;
+        return billing_address;
     } catch (error) {
         console.error(error)
     }
