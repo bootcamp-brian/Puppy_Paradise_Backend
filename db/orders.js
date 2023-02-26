@@ -1,44 +1,42 @@
 const client = require("./client")
 
-async function addToOrderItems({
+async function createOrder({
     userId,
-    puppyId,
     date,
     status,
 }) {
     try{
-        const { rows: [order_item] } = await client.query(`
-            INSERT INTO order_items("userId", "puppyId", date, status)
-            VALUES ($1, $2, $3, $4)
-            ON CONFLICT ("userId", "puppyId") DO NOTHING
+        const { rows: [order] } = await client.query(`
+            INSERT INTO orders("userId", date, status)
+            VALUES ($1, $2, $3)
             RETURNING *;
-        `, [userId, puppyId, date, status])
+        `, [userId, date, status])
 
-    return order_item;
+    return order;
     } catch (error) {
         console.error(error)
     }
 }
 
-async function getOrderItemById(id) {
+async function getOrderById(id) {
 try{
-        const { rows: [ order_item ] } = await client.query(`
+        const { rows: [ order ] } = await client.query(`
             SELECT *
-            FROM order_items
+            FROM orders
             WHERE id=$1;
         `, [id])
 
-        return order_item;
+        return order;
     } catch (error) {
         console.error(error)
     }
 }
 
-async function getOrderItemByUser({ id }) {
+async function getOrderByUser({ id }) {
     try{
         const { rows } = await client.query(`
             SELECT *
-            FROM order_items
+            FROM orders
             WHERE "userId"=$1;
         `, [id])
 
@@ -48,7 +46,7 @@ async function getOrderItemByUser({ id }) {
     }
 }
 
-async function updateOrderItem({ id, ...fields }) {
+async function updateOrder({ id, ...fields }) {
 try{
         const setString = Object.keys(fields).map(
         (key, index) => `"${ key }"=$${ index + 1 }`
@@ -58,37 +56,37 @@ try{
             return;
         }
 
-        const { rows: [ order_item ] } = await client.query(`
-            UPDATE order_items
+        const { rows: [ order ] } = await client.query(`
+            UPDATE orders
             SET ${ setString }
             WHERE id=${id}
             RETURNING *;
         `, Object.values(fields));
 
-        return order_item;
+        return order;
     } catch (error) {
         console.error(error)
     }
 }
 
-async function deleteOrderItem(id) {
+async function deleteOrder(id) {
     try{
-        const { rows: [ order_item ] } =   await client.query(`
-            DELETE FROM order_items
+        const { rows: [ order ] } =   await client.query(`
+            DELETE FROM orders
             WHERE id=$1
             RETURNING *;
     `, [id])
 
-        return order_item;
+        return order;
     } catch (error) {
         console.error(error)
     }
 }
 
 module.exports = {
-    addToOrderItems,
-    getOrderItemById,
-    getOrderItemByUser,
-    updateOrderItem,
-    deleteOrderItem
+    createOrder,
+    getOrderById,
+    getOrderByUser,
+    updateOrder,
+    deleteOrder
   };

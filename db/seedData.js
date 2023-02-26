@@ -5,7 +5,9 @@ const {
     getAllPuppies,
     addShippingAddress,
     addBillingAddress,
-    addToOrderItems,
+    createOrder,
+    getAllOrders,
+    addToOrderPuppies,
     addToCartItems
     //may need more or less as I go through the seed data
   } = require('./');
@@ -17,7 +19,8 @@ async function dropTables() {
         console.log("Dropping All Tables...")
         await client.query(`
             DROP TABLE IF EXISTS cart_items;
-            DROP TABLE IF EXISTS order_items;
+            DROP TABLE IF EXISTS order_puppies;
+            DROP TABLE IF EXISTS orders;
             DROP TABLE IF EXISTS shipping_addresses;
             DROP TABLE IF EXISTS billing_addresses;
             DROP TABLE IF EXISTS puppies;
@@ -43,7 +46,8 @@ async function createTables() {
                 password VARCHAR(255) NOT NULL,
                 phone INTEGER,
                 "isActive" BOOLEAN DEFAULT true,
-                "isAdmin" BOOLEAN DEFAULT false
+                "isAdmin" BOOLEAN DEFAULT false,
+                "resetPassword" BOOLEAN DEFAULT false
             );
         `);
         await client.query(`
@@ -84,12 +88,18 @@ async function createTables() {
             );
         `);
         await client.query(`
-            CREATE TABLE order_items (
+            CREATE TABLE orders (
+                id SERIAL PRIMARY KEY,
+                "userId" INTEGER REFERENCES users(id),
+                date TIMESTAMP,
+                status VARCHAR(255) NOT NULL,
+            );
+        `);
+        await client.query(`
+            CREATE TABLE order_puppies (
                 id SERIAL PRIMARY KEY,
                 "userId" INTEGER REFERENCES users(id),
                 "puppyId" INTEGER REFERENCES puppies(id),
-                date TIMESTAMP,
-                status VARCHAR(255) NOT NULL,
                 UNIQUE ("userId", "puppyId")
             );
         `);
@@ -114,7 +124,7 @@ async function createInitialUsers() {
         const usersToCreate = [
             { firstName: "demi", lastName: "zayas", email: "dzayas@live.com", password: "dontpissmeoff", phone: 7145555555, isActive: true, isAdmin: false },
             { firstName: "brian", lastName: "mui", email: "bmui@live.com", password: "dontpissmeoff", phone: 5625555555, isActive: true, isAdmin: false },
-            { firstName: "andreea", lastName: "merilou", email: "amerilou@live.com", password: "dontpissmeoff", phone: 3235555555, isActive: true, isAdmin: false },
+            { firstName: "andreea", lastName: "merloiu", email: "amerloiu@live.com", password: "dontpissmeoff", phone: 3235555555, isActive: true, isAdmin: false },
         ]
         const users = await Promise.all(usersToCreate.map(createUser))
     
