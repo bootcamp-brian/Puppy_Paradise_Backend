@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 const express = require("express");
-const usersRouter = express.Router();
+const adminRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
 const { getAllUsers } = require('../db');
@@ -16,4 +16,4 @@ adminRouter.get('/user_list', checkAdmin, async (req, res, next) => {
     } 
 })
 
-module.exports = usersRouter;
+module.exports = adminRouter;
