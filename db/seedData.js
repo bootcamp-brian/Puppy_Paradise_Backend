@@ -8,7 +8,7 @@ const {
     createOrder,
     getAllOrders,
     addToOrderPuppies,
-    addToCartItems
+    addItemToCart
     //may need more or less as I go through the seed data
   } = require('./');
 

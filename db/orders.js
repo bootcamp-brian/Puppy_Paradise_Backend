@@ -18,6 +18,19 @@ async function createOrder({
     }
 }
 
+async function getAllOrders() {
+    try{
+        const { rows } = await client.query(`
+            SELECT *
+            FROM orders
+        `);
+
+        return rows;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function getOrderById(id) {
 try{
         const { rows: [ order ] } = await client.query(`
@@ -32,7 +45,7 @@ try{
     }
 }
 
-async function getOrderByUser({ id }) {
+async function getOrdersByUser({ id }) {
     try{
         const { rows } = await client.query(`
             SELECT *
@@ -46,22 +59,16 @@ async function getOrderByUser({ id }) {
     }
 }
 
-async function updateOrder({ id, ...fields }) {
+
+//update function to only updateStatus
+async function updateStatus({ id, status }) {
 try{
-        const setString = Object.keys(fields).map(
-        (key, index) => `"${ key }"=$${ index + 1 }`
-        ).join(', ');
-
-        if (setString.length === 0) {
-            return;
-        }
-
         const { rows: [ order ] } = await client.query(`
             UPDATE orders
-            SET ${ setString }
+            SET status=${status}
             WHERE id=${id}
             RETURNING *;
-        `, Object.values(fields));
+        `, [id, status]);
 
         return order;
     } catch (error) {
@@ -85,8 +92,9 @@ async function deleteOrder(id) {
 
 module.exports = {
     createOrder,
+    getAllOrders,
     getOrderById,
-    getOrderByUser,
-    updateOrder,
+    getOrdersByUser,
+    updateStatus,
     deleteOrder
   };

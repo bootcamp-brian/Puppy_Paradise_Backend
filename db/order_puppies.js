@@ -18,13 +18,14 @@ async function addToOrderPuppies({
     }
 }
 
-async function getOrderPuppyById(id) {
+async function getOrderPuppyById(puppyId) {
     try{
         const { rows: [ order_puppy ] } = await client.query(`
-            SELECT *
+            SELECT order_puppies.*, puppies.name, puppies.price
             FROM order_puppies
-            WHERE id=$1;
-        `, [id])
+            JOIN puppies ON order_puppies."puppyId" = puppies.id 
+            WHERE order_puppies.puppyId=$1;
+        `, [puppyId])
 
         return order_puppy;
     } catch (error) {
@@ -32,38 +33,16 @@ async function getOrderPuppyById(id) {
     }
 }
   
-async function getOrderPuppiesByOrder({ id }) {
+async function getOrderPuppiesByOrder({ orderId }) {
     try{
         const { rows } = await client.query(`
-            SELECT *
+            SELECT order_puppies.*, puppies.name, puppies.price
             FROM order_puppies
-            WHERE "orderId"=$1;
-        `, [id])
+            JOIN puppies ON order_puppies."puppyId" = puppies.id 
+            WHERE order_puppies.orderId=$1;
+        `, [orderId])
 
         return rows;
-    } catch (error) {
-        console.error(error)
-    }
-}
-  
-async function updateOrderPuppy({ id, ...fields }) {
-    try{
-        const setString = Object.keys(fields).map(
-        (key, index) => `"${ key }"=$${ index + 1 }`
-        ).join(', ');
-
-        if (setString.length === 0) {
-            return;
-        }
-
-        const { rows: [ order_puppy ] } = await client.query(`
-            UPDATE order_puppies
-            SET ${ setString }
-            WHERE id=${id}
-            RETURNING *;
-        `, Object.values(fields));
-
-        return order_puppy;
     } catch (error) {
         console.error(error)
     }

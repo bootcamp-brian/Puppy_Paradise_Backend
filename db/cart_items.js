@@ -1,7 +1,7 @@
 const client = require("./client");
 
 
-async function addToCartItems({
+async function addItemToCart({
     userId,
     puppyId,
 }) {
@@ -86,20 +86,20 @@ async function deleteCartItems(id) {
 
 async function deleteCart(userId) {
     try{
-        const { rows: [ cart_item ] } =   await client.query(`
+        const { rows } =   await client.query(`
             DELETE FROM cart_items
             WHERE "userId"=$1
             RETURNING *;
     `, [userId])
 
-        return cart_item;
+        return rows;
     } catch (error) {
         console.error(error)
     }
 }
 
 module.exports = {
-    addToCartItems,
+    addItemToCart,
     getCartById,
     getCartByUser,
     updateCartItems,
