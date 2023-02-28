@@ -1,5 +1,7 @@
 const client = require("./client");
 
+
+//add images
 async function createPuppy({
     name,
     description,

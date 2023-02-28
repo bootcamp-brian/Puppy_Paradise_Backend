@@ -59,8 +59,6 @@ async function getOrdersByUser({ id }) {
     }
 }
 
-
-//update function to only updateStatus
 async function updateStatus({ id, status }) {
 try{
         const { rows: [ order ] } = await client.query(`
@@ -97,4 +95,4 @@ module.exports = {
     getOrdersByUser,
     updateStatus,
     deleteOrder
-  };
+};

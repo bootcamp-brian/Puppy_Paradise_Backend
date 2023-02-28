@@ -8,7 +8,9 @@ const {
     createOrder,
     getAllOrders,
     addToOrderPuppies,
-    addItemToCart
+    addItemToCart,
+    createCategory,
+    addPuppyToCategory
     //may need more or less as I go through the seed data
   } = require('./');
 
@@ -18,6 +20,8 @@ async function dropTables() {
     try {
         console.log("Dropping All Tables...")
         await client.query(`
+            DROP TABLE IF EXISTS puppy_categories;
+            DROP TABLE IF EXISTS categories;
             DROP TABLE IF EXISTS cart_items;
             DROP TABLE IF EXISTS order_puppies;
             DROP TABLE IF EXISTS orders;
@@ -109,6 +113,20 @@ async function createTables() {
                 "userId" INTEGER REFERENCES users(id),
                 "puppyId" INTEGER REFERENCES puppies(id),
                 UNIQUE ("userId", "puppyId")
+            );
+        `);
+        await client.query(`
+            CREATE TABLE categories (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL
+            );
+        `);
+        await client.query(`
+            CREATE TABLE puppy_categories (
+                id SERIAL PRIMARY KEY,
+                "categoryId" INTEGER REFERENCES categories(id),
+                "puppyId" INTEGER REFERENCES puppies(id),
+                UNIQUE ("categoryId", "puppyId")
             );
         `);
         console.log("Finished building tables!");
