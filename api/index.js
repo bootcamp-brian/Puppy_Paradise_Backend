@@ -26,6 +26,10 @@ router.use('/cart', cartRouter);
 const ordersRouter = require('./orders');
 router.use('/orders', ordersRouter);
 
+// ROUTER: /api/admin
+const adminRouter = require('./admin');
+router.use('/admin', adminRouter);
+
 // error handling middleware
 router.use((error, req, res, next) => {
     res.send({

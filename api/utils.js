@@ -28,6 +28,7 @@ const checkAuthorization = async (req, res, next) => {
         next({ error, name, message });
       }
     } else {
+      res.status(401);
       next({
         error: '401',
         name: 'UnauthorizedError',
@@ -51,13 +52,16 @@ const checkAdmin = async (req, res, next) => {
       const token = auth.slice(prefix.length);
   
       try {
-        const { id } = jwt.verify(token, JWT_SECRET);
+        const { id: userId } = jwt.verify(token, JWT_SECRET);
   
-        if (id) {
-          req.user = await getUserById(id);
-          if (user.isAdmin) {
+        if (userId) {
+          // Need a function that searches admins table by userId and returns that row
+          const admin = await getAdminById(userId);
+
+          if (admin.id) {
             next();
           } else {
+            res.status(401);
             next({
               error: '401',
               name: 'UnauthorizedAdminError',
@@ -69,6 +73,7 @@ const checkAdmin = async (req, res, next) => {
         next({ error, name, message });
       }
     } else {
+      res.status(401);
       next({
         error: '401',
         name: 'UnauthorizedError',

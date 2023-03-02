@@ -1,12 +1,12 @@
-/* eslint-disable no-useless-catch */
 const express = require("express");
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-const { createUser, getUser, getOrderItemsByUser, updateUser } = require('../db');
+const { createUser, getUser, updateUser, getUserByEmail, getUserById } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // POST /api/users/register
+// Registers a user
 usersRouter.post('/register', async (req, res, next) => {
     const { email, password } = req.body;
   
@@ -14,6 +14,7 @@ usersRouter.post('/register', async (req, res, next) => {
       const _user = await getUserByEmail(email);
   
       if (_user) {
+        res.status(403);
         next({
             error: '403',
             name: 'EmailInUseError',
@@ -22,6 +23,7 @@ usersRouter.post('/register', async (req, res, next) => {
       }
   
       if (password.length < 8) {
+        res.status(400);
         next({
             error: '400',
             name: 'PasswordTooShortError',
@@ -49,6 +51,7 @@ usersRouter.post('/register', async (req, res, next) => {
   });
 
 // POST /api/users/login
+// Logs in a user
 usersRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -56,6 +59,7 @@ usersRouter.post('/login', async (req, res, next) => {
         const user = await getUser({ email, password });
 
         if (!user) {
+            res.status(400);
             next({
                 error: '400',
                 name: 'IncorrectCredentials Error',
@@ -74,27 +78,8 @@ usersRouter.post('/login', async (req, res, next) => {
     } 
 });
 
-// GET /api/users/cart
-usersRouter.get('/user_list', checkAuthorization, async (req, res, next) => {
-    try {
-        const users = await getAllUsers();
-        res.send(users);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
-
-// GET /api/users/me/orders
-// Need to discuss some database stuff for this one
-// usersRouter.get('/me/orders', checkAuthorization, async (req, res, next) => {
-//     try {
-
-//     } catch ({ error, name, message }) {
-//         next({ error, name, message });
-//     } 
-// })
-
 // GET /api/users/me
+// Gets a logged in user's info
 usersRouter.get('/me', checkAuthorization, async (req, res, next) => {
     try {
         res.send(req.user);
@@ -104,30 +89,57 @@ usersRouter.get('/me', checkAuthorization, async (req, res, next) => {
 })
 
 // PATCH /api/users/me
+// Edits a logged in user's info
 usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user
         const { ...fields } = req.body;
 
-        if (req.body.email) {
-            const user = await getUserByEmail(req.body.email);
+        const user = await getUserById(userId);
 
-            if (user.id) {
-                res.status(404);
+        if (!user) {
+            res.status(404);
+            next({
+                error: '404',
+                name: 'UserNotFoundError',
+                message: 'User not found'
+            })
+        } else if (req.body.email) {
+            const userByEmail = await getUserByEmail(req.body.email);
+
+            if (userByEmail.id && userByEmail.id !== userId) {
+                res.status(400);
                 next({
-                    error: '404',
-                    name: 'RoutineNotFoundError',
-                    message: 'Routine not found'
+                    error: '400',
+                    name: 'EmailInUseError',
+                    message: 'That email is already in use'
                 })
             } else {
-                const updatedUser = await updateUser({ id, ...fields });
+                const updatedUser = await updateUser({ userId, ...fields });
     
-                res.send(updatedUser);
+                if (!updatedUser.id) {
+                    next({
+                        error: '400',
+                        name: 'UserUpdateError',
+                        message: 'Unable to update user info'
+                    })
+                } else {
+                    res.send(updatedUser);
+                }
             }
         } else {
-            const updatedUser = await updateUser({ id, ...fields });
+            const updatedUser = await updateUser({ userId, ...fields });
 
-            res.send(updatedUser);
+            if (!updatedUser.id) {
+                res.status(400);
+                next({
+                    error: '400',
+                    name: 'UserUpdateError',
+                    message: 'Unable to update user info'
+                })
+            } else {
+                res.send(updatedUser);
+            }
         }
     } catch ({ error, name, message }) {
         next({ error, name, message });
