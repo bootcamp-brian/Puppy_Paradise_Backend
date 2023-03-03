@@ -2,7 +2,7 @@ const express = require("express");
 const puppiesRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-const { getAllPupppies, getPuppyById, getAllCategories, getAllTaggedPuppies } = require('../db');
+const { getAvailablePuppies, getPuppyById, getAllCategories, getAllTaggedPuppies } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // GET /api/puppies/categories
@@ -11,6 +11,26 @@ puppiesRouter.get('/categories', async (req, res, next) => {
     try {
         const categories = await getAllCategories();
         res.send(categories);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// GET /api/puppies/tagged_puppies/:categoryId
+// Gets all puppies tagged with a specific category
+puppiesRouter.get('/tagged_puppies/:categoryId', async (req, res, next) => {
+    try {
+        const params = req.params;
+        const categoryId = Number(params.categoryId);
+        const taggedPuppies = await getAllTaggedPuppies();
+
+        const categoryPuppies = taggedPuppies.filter(puppy => {
+            if (puppy.categoryId === categoryId) {
+                return true;
+            }
+        });
+
+        res.send(categoryPuppies);
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 
@@ -50,10 +70,10 @@ puppiesRouter.get('/:puppyId', async (req, res, next) => {
 })
 
 // GET /api/puppies
-// gets all puppies
+// gets all available puppies
 puppiesRouter.get('/', async (req, res, next) => {
     try {
-        const puppies = await getAllPupppies();
+        const puppies = await getAvailablePuppies();
         res.send(puppies);
     } catch ({ error, name, message }) {
         next({ error, name, message });

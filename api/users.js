@@ -1,7 +1,7 @@
 const express = require("express");
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, JWT_SECRET_ADMIN } = process.env;
 const { createUser, getUser, updateUser, getUserByEmail, getUserById } = require('../db');
 const { checkAuthorization } = require("./utils");
 
@@ -66,13 +66,26 @@ usersRouter.post('/login', async (req, res, next) => {
                 message: 'Incorrect email or password'
             })
         }
-        
+
         const token = jwt.sign({ id: user.id, email }, JWT_SECRET);
-        res.send({ 
+        const admin = await getAdminById(user.id);
+
+        if(admin.id) {
+            const adminToken = jwt.sign({ id: user.id, email }, JWT_SECRET_ADMIN);
+            res.send({
+                message: "you're logged in!",
+                token,
+                adminToken,
+                user
+            });
+        } else {
+            res.send({ 
             message: "you're logged in!",
             token,
             user 
-        });
+            });
+        }
+        
     } catch ({ error, name, message }) {
       next({ error, name, message });
     } 

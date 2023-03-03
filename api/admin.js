@@ -1,8 +1,6 @@
 /* eslint-disable no-useless-catch */
 const express = require("express");
 const adminRouter = express.Router();
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
 const {
     getAllUsers,
     getAllOrders,
@@ -131,9 +129,9 @@ adminRouter.patch('/users/:userId', async (req, res, next) => {
     } 
 })
 
-// POST /api/admin/users/promote/:userId
+// PATCH /api/admin/users/promote/:userId
 // Let's admin promote a specific user to admin status
-adminRouter.post('/users/promote/:userId', async (req, res, next) => {
+adminRouter.patch('/users/promote/:userId', async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -155,9 +153,9 @@ adminRouter.post('/users/promote/:userId', async (req, res, next) => {
     } 
 })
 
-// POST /api/admin/users/reset/:userId
+// PATCH /api/admin/users/reset/:userId
 // Let's admin set a specific user to require a password reset
-adminRouter.post('/users/reset/:userId', async (req, res, next) => {
+adminRouter.patch('/users/reset/:userId', async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -227,27 +225,28 @@ adminRouter.get('/orders/:userId', async (req, res, next) => {
     } 
 })
 
+// Think this route might not be needed
 // GET /api/admin/orders/:orderId
 // Let's admin view a specific order
-adminRouter.get('/orders/:orderId', async (req, res, next) => {
-    try {
-        const { orderId } = req.params;
-        const order = await getOrderById(orderId);
+// adminRouter.get('/orders/:orderId', async (req, res, next) => {
+//     try {
+//         const { orderId } = req.params;
+//         const order = await getOrderById(orderId);
 
-        if (!order.id) {
-            res.status(404);
-            next({
-                error: '404',
-                name: 'OrderNotFoundError',
-                message: 'Order not found'
-            })
-        } else {
-            res.send(order);
-        }
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
+//         if (!order.id) {
+//             res.status(404);
+//             next({
+//                 error: '404',
+//                 name: 'OrderNotFoundError',
+//                 message: 'Order not found'
+//             })
+//         } else {
+//             res.send(order);
+//         }
+//     } catch ({ error, name, message }) {
+//         next({ error, name, message });
+//     } 
+// })
 
 // GET /api/admin/orders
 // Let's admin view all orders
@@ -260,9 +259,9 @@ adminRouter.get('/orders', async (req, res, next) => {
     } 
 })
 
-// PATCH /api/admin/orders/:orderId
+// PATCH /api/admin/orders/status/:orderId
 // Let's admin update a specific order's status
-adminRouter.patch('/orders/:orderId', async (req, res, next) => {
+adminRouter.patch('/orders/status/:orderId', async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const { status } = req.body;
@@ -289,52 +288,52 @@ adminRouter.patch('/orders/:orderId', async (req, res, next) => {
 // GET /api/admin/puppies/categories
 // Shows all puppy categories but also checks if user is admin
 // may not need this, depends on how we setup frontend
-puppiesRouter.get('/puppies/categories', async (req, res, next) => {
-    try {
-        const categories = await getAllCategories();
-        res.send(categories);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
+// puppiesRouter.get('/puppies/categories', async (req, res, next) => {
+//     try {
+//         const categories = await getAllCategories();
+//         res.send(categories);
+//     } catch ({ error, name, message }) {
+//         next({ error, name, message });
+//     } 
+// })
 
 // GET /api/admin/puppies/tagged_puppies
 // Shows all tagged puppies but also checks if user is admin
 // may not need this, depends on how we setup frontend
-puppiesRouter.get('/puppies/tagged_puppies', async (req, res, next) => {
-    try {
-        const taggedPuppies = await getAllTaggedPuppies();
-        res.send(taggedPuppies);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
+// puppiesRouter.get('/puppies/tagged_puppies', async (req, res, next) => {
+//     try {
+//         const taggedPuppies = await getAllTaggedPuppies();
+//         res.send(taggedPuppies);
+//     } catch ({ error, name, message }) {
+//         next({ error, name, message });
+//     } 
+// })
 
 // GET /api/admin/puppies/:puppyId
-// Shows all puppies but also checks if user is admin
+// Shows specific puppy but also checks if user is admin
 // may not need this, depends on how we setup frontend
-adminRouter.get('puppies/:puppyId', async (req, res, next) => {
-    try {
-        const { puppyId } = req.params;
-        const puppy = await getPuppyById(puppyId);
+// adminRouter.get('puppies/:puppyId', async (req, res, next) => {
+//     try {
+//         const { puppyId } = req.params;
+//         const puppy = await getPuppyById(puppyId);
 
-        if (!puppy.id) {
-            res.status(404);
-            next({
-                error: '404',
-                name: 'PuppyNotFoundError',
-                message: 'Puppy not found'
-            })
-        }
+//         if (!puppy.id) {
+//             res.status(404);
+//             next({
+//                 error: '404',
+//                 name: 'PuppyNotFoundError',
+//                 message: 'Puppy not found'
+//             })
+//         }
         
-        res.send(puppy);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
+//         res.send(puppy);
+//     } catch ({ error, name, message }) {
+//         next({ error, name, message });
+//     } 
+// })
 
 // GET /api/admin/puppies
-// Shows specific puppy but also checks if user is admin
+// Shows all puppies (including unavailable ones)
 adminRouter.get('/puppies', async (req, res, next) => {
     try {
         const puppies = await getAllPupppies();
@@ -424,7 +423,7 @@ adminRouter.post('/puppies', async (req, res, next) => {
             size,
             pedigree,
             isVaccinated,
-            isNeutered,
+            isAltered,
             gender,
             isAvailable,
             price
@@ -438,7 +437,7 @@ adminRouter.post('/puppies', async (req, res, next) => {
             size,
             pedigree,
             isVaccinated,
-            isNeutered,
+            isAltered,
             gender,
             isAvailable,
             price
