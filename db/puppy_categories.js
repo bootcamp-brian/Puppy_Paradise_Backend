@@ -50,5 +50,5 @@ async function deletePuppyFromCategory(id) {
 module.exports = {
     addPuppyToCategory,
     getPuppiesByCategory,
-    deletePuppyFromCategory
+    deletePuppyFromCategory,
 };

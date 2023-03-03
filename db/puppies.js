@@ -1,9 +1,9 @@
 const client = require("./client");
 
-
-//add images
 async function createPuppy({
     name,
+    image1, 
+    image2,
     description,
     age,
     breed,
@@ -11,18 +11,18 @@ async function createPuppy({
     size,
     pedigree,
     isVaccinated,
-    isNeutered,
+    isAltered,
     gender,
     isAvailable,
     price
 }) {
     try{
         const { rows: [ puppy ] } = await client.query(`
-            INSERT INTO puppies(name, description, age, breed, weight, size, pedigree, "isVaccinated", "isNeutered", gender, "isAvailable", price)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            INSERT INTO puppies(name, image1, image2, description, age, breed, weight, size, pedigree, "isVaccinated", "isAltered", gender, "isAvailable", price)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
-        `, [name, description, age, breed, weight, size, pedigree, isVaccinated, isNeutered, gender, isAvailable, price])
+        `, [name, image1, image2, description, age, breed, weight, size, pedigree, isVaccinated, isAltered, gender, isAvailable, price])
     
         return puppy;
     } catch (error) {
@@ -38,6 +38,20 @@ async function getAllPuppies() {
         `);
     
         return rows;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getAvailablePuppies() {
+    try{
+        const { rows: [ puppy ] } = await client.query(`
+            SELECT *
+            FROM puppies
+            WHERE "isAvailable"=true;
+        `, [id])
+  
+        return puppy;
     } catch (error) {
         console.error(error)
     }
@@ -96,6 +110,7 @@ async function deletePuppy(id) {
 module.exports = {
     createPuppy,
     getAllPuppies,
+    getAvailablePuppies,
     getPuppyById,
     updatePuppy,
     deletePuppy

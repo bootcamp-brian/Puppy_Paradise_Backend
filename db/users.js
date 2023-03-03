@@ -7,20 +7,17 @@ async function createUser({
   lastName,
   password,
   phone,
-  email,
-  isActive,
-  isAdmin,
-  resetPassword
+  email
 }) {
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
     const { rows: [ user ] } = await client.query(`
-      INSERT INTO users("firstName", "lastName", email, password, phone, "isActive", "isAdmin", "resetPassword")
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO users("firstName", "lastName", email, password, phone)
+      VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (email) DO NOTHING
       RETURNING *;
-    `, [firstName, lastName, email, hashedPassword, phone, isActive, isAdmin, resetPassword]);
+    `, [firstName, lastName, email, hashedPassword, phone]);
 
     delete user.password;
 
@@ -66,7 +63,7 @@ async function getUser({
 async function getUserById(userId) {
   try{
     const { rows: [ user ] } = await client.query(`
-      SELECT id, "firstName", "lastName", phone, email, "isActive", "isAdmin", "resetPassword" 
+      SELECT id, "firstName", "lastName", phone, email 
       FROM users
       WHERE id=${ userId };
     `);
@@ -120,11 +117,11 @@ async function updateUser({ id, ...fields }) {
 
 async function deleteUser(id) {
   try{
-      await client.query(`
-          UPDATE users
-          SET "isActive"=${false}
-          WHERE "id"=$1;
-      `, [id])
+    const { rows: [ order ] } =   await client.query(`
+        DELETE FROM users
+        WHERE id=$1
+        RETURNING *;
+  `, [id])
   } catch (error) {
       console.error(error)
   }
