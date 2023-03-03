@@ -28,6 +28,8 @@ async function createUser({
 }
 
 async function getAllUsers() {
+
+  //MAP OVER ARRAY OF USERS AND attachUserData to each one, then return
   try{
       const { rows } = await client.query(`
           SELECT *
@@ -72,7 +74,7 @@ async function getUserById(userId) {
       return null;
     } 
 
-    return user;
+    return attachUserData(user);
   } catch (error) {
     console.error(error)
   }
@@ -86,11 +88,56 @@ async function getUserByEmail(email) {
       WHERE email=$1;
     `, [email]);
 
-    return user;
+    return attachUserData(user);
   } catch (error) {
     console.error(error)
   }
 }
+
+async function attachUserData(user) {
+  try{
+    const userData = { ...user };
+    const { rows: [ shippingAddress ] } = await client.query(`
+        SELECT *
+        FROM shipping_addresses
+        WHERE "userId"=${userData.id};
+    `);
+    const { rows: [ billingAddress ] } = await client.query(`
+        SELECT *
+        FROM billing_addresses
+        WHERE "userId"=${userData.id};
+    `);
+    const { rows: cartItems } = await client.query(`
+        SELECT *
+        FROM cart_items
+        WHERE "userId"=${userData.id};
+    `);
+    let total = 0;
+    for (let item of cartItems) {
+        total += item.price;
+    }
+    const cart = {
+        cartItems,
+        total
+    }
+    const { rows: [ inactiveUser ] } = await client.query(`
+        SELECT *
+        FROM inactive_users
+        WHERE "userId"=${userData.id};
+    `);
+    const userStatus = inactiveUser.id ? 'inactive' : 'active';
+
+    userData.shippingAddress = shippingAddress;
+    userData.billingAddress = billingAddress;
+    userData.cart = cart;
+    userData.status = userStatus;
+
+    return userData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 async function updateUser({ id, ...fields }) {
   try{
@@ -133,6 +180,7 @@ module.exports = {
   getUser,
   getUserById,
   getUserByEmail,
+  attachUserData,
   updateUser,
   deleteUser
 }
