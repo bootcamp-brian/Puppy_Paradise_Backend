@@ -1,7 +1,5 @@
 const express = require("express");
 const cartRouter = express.Router();
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
 const { getCartByUser, getCartItemById, deleteCartItem, getPuppyById, addItemToCart, deleteCart } = require('../db');
 const { checkAuthorization } = require("./utils");
 
@@ -11,7 +9,15 @@ cartRouter.get('/', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
 
-        const cart = await getCartByUser(userId);
+        const cartItems = await getCartByUser(userId);
+        let subtotal = 0;
+        for (let item of cartItems) {
+            subtotal += item.price;
+        }
+        const cart = {
+            cartItems,
+            subtotal
+        }
 
         res.send(cart);
     } catch ({ error, name, message }) {
@@ -19,9 +25,9 @@ cartRouter.get('/', checkAuthorization, async (req, res, next) => {
     } 
 })
 
-// POST /api/cart/puppies/:puppyId
+// PATCH /api/cart/puppies/:puppyId
 // Adds a specific puppy to the logged in user's cart
-cartRouter.post('/puppies/:puppyId', checkAuthorization, async (req, res, next) => {
+cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
         const { puppyId } = req.params;

@@ -1,7 +1,5 @@
 const express = require("express");
 const ordersRouter = express.Router();
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
 const { getOrderById, getOrdersByUser, createOrder } = require('../db');
 const { checkAuthorization } = require("./utils");
 
@@ -51,13 +49,22 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
 })
 
 // POST /api/orders
-// Creates a new order for logged in user
+// Creates a new order for logged in user, and clears their cart
 ordersRouter.post('', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
         const { date, status } = req.body;
         const order = createOrder({ userId, date, status });
+        const orderItems = await getCartByUser(userId);
 
+        if (!orderItems[0]) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'EmptyCartError',
+                message: 'Your cart is empty'
+            })
+        }
         if (!order.id) {
             res.status(400);
             next({
@@ -67,6 +74,15 @@ ordersRouter.post('', checkAuthorization, async (req, res, next) => {
             })
         }
 
+        let total = 0;
+        for (let item of orderItems) {
+            total += item.price;
+        }
+
+        order.orderItems = orderItems;
+        order.total = total;
+
+        deleteCart(userId);
         res.send(order);
     } catch ({ error, name, message }) {
         next({ error, name, message });

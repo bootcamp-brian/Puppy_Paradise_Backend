@@ -1,9 +1,6 @@
 const express = require("express");
 const puppiesRouter = express.Router();
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
 const { getAvailablePuppies, getPuppyById, getAllCategories, getAllTaggedPuppies } = require('../db');
-const { checkAuthorization } = require("./utils");
 
 // GET /api/puppies/categories
 // Gets all puppy categories
@@ -22,25 +19,8 @@ puppiesRouter.get('/tagged_puppies/:categoryId', async (req, res, next) => {
     try {
         const params = req.params;
         const categoryId = Number(params.categoryId);
-        const taggedPuppies = await getAllTaggedPuppies();
+        const taggedPuppies = await getPuppiesByCategory({ categoryId });
 
-        const categoryPuppies = taggedPuppies.filter(puppy => {
-            if (puppy.categoryId === categoryId) {
-                return true;
-            }
-        });
-
-        res.send(categoryPuppies);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
-
-// GET /api/puppies/tagged_puppies
-// Gets all tagged puppies (puppies that have been categorized)
-puppiesRouter.get('/tagged_puppies', async (req, res, next) => {
-    try {
-        const taggedPuppies = await getAllTaggedPuppies();
         res.send(taggedPuppies);
     } catch ({ error, name, message }) {
         next({ error, name, message });
