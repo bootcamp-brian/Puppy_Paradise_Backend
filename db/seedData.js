@@ -26,7 +26,6 @@ async function dropTables() {
             DROP TABLE IF EXISTS shipping_addresses;
             DROP TABLE IF EXISTS billing_addresses;
             DROP TABLE IF EXISTS users;
-
         `);
         console.log("Finished dropping tables...")
     } catch (error) {
