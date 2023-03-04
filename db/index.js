@@ -1,6 +1,6 @@
 module.exports = {
     ...require('./client'),
-    ...require('./admin'),
+    ...require('./admins'),
     ...require('./cart_items'),
     ...require('./categories'),
     ...require('./inactive_users'),
