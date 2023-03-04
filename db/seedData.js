@@ -6,8 +6,7 @@ const {
     createAdmin,
     createOrder,
     addItemToCart,
-  } = require('./');
-const { createAdmin } = require('./admins');
+} = require('./');
 const client = require("./client");
 const { getAllUsers } = require('./users');
 
