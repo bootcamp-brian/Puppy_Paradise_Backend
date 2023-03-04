@@ -44,13 +44,13 @@ async function getAllPuppies() {
 
 async function getAvailablePuppies() {
     try{
-        const { rows: [ puppy ] } = await client.query(`
+        const { rows } = await client.query(`
             SELECT *
             FROM puppies
             WHERE "isAvailable"=true;
         `, [id])
   
-        return puppy;
+        return rows;
     } catch (error) {
         console.error(error)
     }
