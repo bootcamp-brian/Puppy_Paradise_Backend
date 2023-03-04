@@ -16,35 +16,49 @@ async function createAdmin({
     }
 }
 
-async function getAllAdmins() {
+async function getAdminById(userId) {
     try{
-        const { rows } = await client.query(`
+        const { rows: [admin] } = await client.query(`
             SELECT *
             FROM admins
-        `);
-
-        return rows;
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-async function deleteAdmin(id) {
-    try{
-        const { rows: [ admin ] } =   await client.query(`
-            DELETE FROM admins
-            WHERE id=$1
-            RETURNING *;
-    `, [id])
+            WHERE "userId"=${userId}
+        `)
 
         return admin;
     } catch (error) {
         console.error(error)
     }
 }
+// async function getAllAdmins() {
+//     try{
+//         const { rows } = await client.query(`
+//             SELECT *
+//             FROM admins
+//         `);
+
+//         return rows;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
+
+// async function deleteAdmin(id) {
+//     try{
+//         const { rows: [ admin ] } =   await client.query(`
+//             DELETE FROM admins
+//             WHERE id=$1
+//             RETURNING *;
+//     `, [id])
+
+//         return admin;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
 module.exports = {
     createAdmin,
-    getAllAdmins,
-    deleteAdmin
+    getAdminById
+    // getAllAdmins,
+    // deleteAdmin
 };

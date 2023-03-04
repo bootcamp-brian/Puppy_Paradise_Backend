@@ -2,13 +2,21 @@ const express = require("express");
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_SECRET_ADMIN } = process.env;
-const { createUser, getUser, updateUser, getUserByEmail, getUserById } = require('../db');
+const { createUser, getUser, updateUser, getUserByEmail, getUserById, getResetUserById, deleteResetUser, getAdminById } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // POST /api/users/register
 // Registers a user
 usersRouter.post('/register', async (req, res, next) => {
-    const { email, password } = req.body;
+    const {
+        firstName,
+        lastName,
+        password,
+        phone,
+        email,
+        shippingAddress,
+        billingAddress
+    } = req.body;
   
     try {
       const _user = await getUserByEmail(email);
@@ -31,7 +39,15 @@ usersRouter.post('/register', async (req, res, next) => {
         })
       }
 
-      const user = await createUser({ email, password });
+      const user = await createUser({
+        firstName,
+        lastName,
+        password,
+        phone,
+        email,
+        shippingAddress,
+        billingAddress
+      });
   
       const token = jwt.sign({ 
         id: user.id, 
@@ -57,14 +73,23 @@ usersRouter.post('/login', async (req, res, next) => {
 
     try {
         const user = await getUser({ email, password });
+        const resetUser = getResetUserById(user.id);
+
+        if (resetUser) {
+            res.send({
+                message: "Please reset your password",
+                userId: user.id,
+                needsReset: true
+            });
+        }
 
         if (!user) {
             res.status(400);
             next({
                 error: '400',
-                name: 'IncorrectCredentials Error',
+                name: 'IncorrectCredentialsError',
                 message: 'Incorrect email or password'
-            })
+            });
         }
 
         const token = jwt.sign({ id: user.id, email }, JWT_SECRET);
@@ -90,6 +115,30 @@ usersRouter.post('/login', async (req, res, next) => {
       next({ error, name, message });
     } 
 });
+
+// DELETE /api/users/password_reset/:userId
+// Removes user from the reset_users table once they've reset their password
+usersRouter.delete('/password_reset/:userId', async (req, res, next) => {
+    try {
+        const { password } = req.body;
+        const { userId } = req.params;
+
+        const user = deleteResetUser(userId, password);
+
+        if (!user.id) {
+            res.status(404);
+            next({
+                error: '404',
+                name: 'UserNotFoundError',
+                message: 'User not found'
+            });
+        } else {
+            res.send(user);
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
 
 // GET /api/users/me
 // Gets a logged in user's info

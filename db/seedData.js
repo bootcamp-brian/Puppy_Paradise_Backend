@@ -93,6 +93,7 @@ async function createTables() {
                 "userId" INTEGER REFERENCES users(id),
                 date TIMESTAMP,
                 status VARCHAR(255) NOT NULL,
+                total NUMERIC(7,2)
             );
         `);
         await client.query(`

@@ -1,6 +1,6 @@
 const express = require("express");
 const puppiesRouter = express.Router();
-const { getAvailablePuppies, getPuppyById, getAllCategories, getAllTaggedPuppies } = require('../db');
+const { getAvailablePuppies, getPuppyById, getAllCategories, getPuppiesByCategory } = require('../db');
 
 // GET /api/puppies/categories
 // Gets all puppy categories

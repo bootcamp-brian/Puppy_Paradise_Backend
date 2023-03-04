@@ -1,8 +1,6 @@
 const client = require("./client")
 
-async function createResetUser({
-    userId
-}) {
+async function createResetUser(userId) {
     try{
         const { rows: [reset_user] } = await client.query(`
             INSERT INTO reset_users("userId")
@@ -16,28 +14,55 @@ async function createResetUser({
     }
 }
 
-async function getAllResetUsers() {
-    try{
-        const { rows } = await client.query(`
-            SELECT *
-            FROM reset_users
-        `);
+// async function getAllResetUsers() {
+//     try{
+//         const { rows } = await client.query(`
+//             SELECT *
+//             FROM reset_users
+//         `);
 
-        return rows;
+//         return rows;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
+
+async function getResetUserById(userId) {
+    try{
+        const { rows: [ user ] } = await client.query(`
+            SELECT * 
+            FROM reset_users
+            WHERE "userId"=${ userId };
+        `);
+  
+        if (user.id) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
-        console.error(error)
+      console.error(error)
     }
 }
 
-async function deleteResetUser(id) {
+async function deleteResetUser(userId, password) {
     try{
         const { rows: [ reset_user ] } =   await client.query(`
             DELETE FROM reset_users
             WHERE id=$1
             RETURNING *;
-    `, [id])
+        `, [userId])
 
-        return reset_user;
+        const { rows: [ user ]} = await client.query(`
+            UPDATE users
+            SET "password"=${password}
+            WHERE id=${userId}
+            RETURNING *;
+        `)
+
+        delete user.password;
+
+        return user;
     } catch (error) {
         console.error(error)
     }
@@ -45,6 +70,6 @@ async function deleteResetUser(id) {
 
 module.exports = {
     createResetUser,
-    getAllResetUsers,
+    // getAllResetUsers,
     deleteResetUser
 };

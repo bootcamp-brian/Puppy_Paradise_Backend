@@ -24,7 +24,7 @@ async function getPuppiesByCategory({ categoryId }) {
             SELECT *
             FROM puppy_categories
             JOIN puppies ON puppy_categories."puppyId" = puppies.id 
-            WHERE puppy_categories.categoryId=$1;
+            WHERE puppy_categories."categoryId"=$1;
         `, [categoryId])
 
         return rows;
@@ -33,13 +33,13 @@ async function getPuppiesByCategory({ categoryId }) {
     }
 }
   
-async function deletePuppyFromCategory(id) {
+async function deletePuppyFromCategory(puppyId, categoryId) {
     try{
         const { rows: [ puppy_category ] } =   await client.query(`
             DELETE FROM puppy_categories
-            WHERE id=$1
+            WHERE "categoryId"=${categoryId} AND "puppyId"=${puppyId}
             RETURNING *;
-    `, [id])
+    `)
 
         return puppy_category;
     } catch (error) {

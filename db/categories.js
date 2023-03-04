@@ -29,19 +29,19 @@ async function getAllCategories() {
     }
 }
 
-async function getCategoryByName(name) {
-    try{
-        const { rows: [category] } = await client.query(`
-            SELECT *
-            FROM categories
-            WHERE name=$1;
-        `, [name]);
+// async function getCategoryByName(name) {
+//     try{
+//         const { rows: [category] } = await client.query(`
+//             SELECT *
+//             FROM categories
+//             WHERE name=$1;
+//         `, [name]);
 
-        return category;
-    } catch (error) {
-        console.error(error)
-    }
-}
+//         return category;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
 async function getCategoryById(categoryId) {
     try{
@@ -78,7 +78,7 @@ async function deleteCategory(id) {
 module.exports = {
     createCategory,
     getAllCategories,
-    getCategoryByName,
+    // getCategoryByName,
     getCategoryById,
     deleteCategory
 };

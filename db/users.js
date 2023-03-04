@@ -1,5 +1,6 @@
 const client = require("./client");
 const bcrypt = require('bcrypt');
+const { addShippingAddress, addBillingAddress } = require("./user_addresses");
 const SALT_COUNT = 10;
 
 async function createUser({
@@ -7,7 +8,9 @@ async function createUser({
   lastName,
   password,
   phone,
-  email
+  email,
+  shippingAddress,
+  billingAddress
 }) {
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
@@ -21,6 +24,9 @@ async function createUser({
 
     delete user.password;
 
+    addShippingAddress({ userId: user.id, ...shippingAddress});
+    addBillingAddress({ userId: user.id, ...billingAddress});
+    attachUserData(user);
     return user;
   } catch (error) {
     console.error(error)
@@ -165,19 +171,19 @@ async function updateUser({ id, ...fields }) {
   }
 }
 
-async function deleteUser(id) {
-  try{
-    const { rows: [ user ] } =   await client.query(`
-        DELETE FROM users
-        WHERE id=$1
-        RETURNING *;
-  `, [id])
+// async function deleteUser(id) {
+//   try{
+//     const { rows: [ user ] } =   await client.query(`
+//         DELETE FROM users
+//         WHERE id=$1
+//         RETURNING *;
+//   `, [id])
 
-    return user;
-  } catch (error) {
-      console.error(error)
-  }
-}
+//     return user;
+//   } catch (error) {
+//       console.error(error)
+//   }
+// }
 
 module.exports = {
   createUser,
@@ -187,5 +193,5 @@ module.exports = {
   getUserByEmail,
   attachUserData,
   updateUser,
-  deleteUser
+  // deleteUser
 }

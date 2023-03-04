@@ -36,8 +36,9 @@ try{
 async function getCartByUser({ id }) {
     try{
         const { rows } = await client.query(`
-            SELECT *
+            SELECT puppies.*, cart_items.userId
             FROM cart_items
+            JOIN puppies ON cart_items."puppyId"=puppies.id
             WHERE "userId"=$1;
         `, [id])
 
@@ -47,30 +48,30 @@ async function getCartByUser({ id }) {
     }
 }
 
-async function updateCartItems({ id, ...fields }) {
-try{
-        const setString = Object.keys(fields).map(
-        (key, index) => `"${ key }"=$${ index + 1 }`
-        ).join(', ');
+// async function updateCartItems({ id, ...fields }) {
+// try{
+//         const setString = Object.keys(fields).map(
+//         (key, index) => `"${ key }"=$${ index + 1 }`
+//         ).join(', ');
 
-        if (setString.length === 0) {
-            return;
-        }
+//         if (setString.length === 0) {
+//             return;
+//         }
 
-        const { rows: [ cart_item ] } = await client.query(`
-            UPDATE cart_items
-            SET ${ setString }
-            WHERE id=${id}
-            RETURNING *;
-        `, Object.values(fields));
+//         const { rows: [ cart_item ] } = await client.query(`
+//             UPDATE cart_items
+//             SET ${ setString }
+//             WHERE id=${id}
+//             RETURNING *;
+//         `, Object.values(fields));
 
-        return cart_item;
-    } catch (error) {
-        console.error(error)
-    }
-}
+//         return cart_item;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
-async function deleteCartItems(id) {
+async function deleteCartItem(id) {
     try{
         const { rows: [ cart_item ] } =   await client.query(`
             DELETE FROM cart_items
@@ -102,7 +103,7 @@ module.exports = {
     addItemToCart,
     getCartById,
     getCartByUser,
-    updateCartItems,
-    deleteCartItems,
+    // updateCartItems,
+    deleteCartItem,
     deleteCart
   };

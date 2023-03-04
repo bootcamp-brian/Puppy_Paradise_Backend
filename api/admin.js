@@ -7,8 +7,8 @@ const {
     getUserById,
     getUserByEmail,
     updateUser,
-    addAdmin,
-    resetUser,
+    createAdmin,
+    createResetUser,
     createInactiveUser,
     getAllOrders,
     getOrderById,
@@ -17,12 +17,15 @@ const {
     createPuppy,
     updatePuppy,
     deletePuppy,
-    getAllCategories,
-    getAllTaggedPuppies,
     getCategoryById,
     getPuppyById,
-    tagPuppy,
+    addPuppyToCategory,
     createCategory,
+    updateStatus,
+    getAllInactiveUsers,
+    deleteInactiveUser,
+    deletePuppyFromCategory,
+    deleteCategory
 } = require('../db');
 const { checkAdmin } = require("./utils");
 
@@ -49,6 +52,17 @@ adminRouter.get('/users/:userId', async (req, res, next) => {
         } else {
             res.send(user);
         }
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// GET /api/admin/users/inactive
+adminRouter.get('/users/inactive', async (req, res, next) => {
+    try {
+        const inactiveUsers = await getAllInactiveUsers();
+
+        res.send(inactiveUsers);
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 
@@ -143,7 +157,7 @@ adminRouter.patch('/users/promote/:userId', async (req, res, next) => {
             })
         } else {
             // need a function that adds a row to admins table using the userId parameter to fill in the "userId" column
-            const newAdmin = addAdmin(userId);
+            const newAdmin = createAdmin(userId);
             res.send(newAdmin);
         }
     } catch ({ error, name, message }) {
@@ -167,8 +181,31 @@ adminRouter.patch('/users/reset/:userId', async (req, res, next) => {
             })
         } else {
             // need a function that adds a row to reset_users table using the userId parameter to fill in the "userId" column
-            const targetUser = resetUser(userId);
+            const targetUser = createResetUser(userId);
             res.send(targetUser);
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// POST /api/admin/users/reactivate/:userId
+// Lets admin reactivate an inactive user
+adminRouter.post('/users/reactivate/:userId', async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await getUserById(userId);
+
+        if (!user.id) {
+            res.status(404);
+            next({
+                error: '404',
+                name: 'UserNotFoundError',
+                message: 'User not found'
+            })
+        } else {
+            const reactivatedUser = deleteInactiveUser(userId);
+            res.send(reactivated);
         }
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -353,7 +390,7 @@ adminRouter.post('/puppies/tagged_puppies', async (req, res, next) => {
             })
         }
 
-        const taggedPuppy = tagPuppy(categoryId, puppyId);
+        const taggedPuppy = addPuppyToCategory(categoryId, puppyId);
         res.send(taggedPuppy)
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -442,6 +479,33 @@ adminRouter.patch('/puppies/:puppyId', async (req, res, next) => {
                 res.send(updatedPuppy);
             }
         }
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// DELETE /api/admin/puppies/categories/:categoryId
+adminRouter.delete('puppies/categories/:categoryId', async (req, res, next) => {
+    try {
+        const { categoryId } = req.params;
+
+        const deletedCategory = await deleteCategory(categoryId);
+        res.send(deletedCategory)
+
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// DELETE /api/admin/puppies/tagged_puppies/:puppyId/:categoryId
+// Lets admin remove a puppy from a category
+adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', async (req, res, next) => {
+    try {
+        const { puppyId, categoryId } = req.params;
+
+        const deletedPuppy = await deletePuppyFromCategory(puppyId, categoryId);
+        res.send(deletedPuppy)
+
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 

@@ -1,6 +1,6 @@
 const express = require("express");
 const ordersRouter = express.Router();
-const { getOrderById, getOrdersByUser, createOrder } = require('../db');
+const { getOrderById, getOrdersByUser, createOrder, addPuppyToOrder, getCartByUser } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // GET /api/orders/:orderId
@@ -53,8 +53,8 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
 ordersRouter.post('', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
-        const { date, status } = req.body;
-        const order = createOrder({ userId, date, status });
+        const { date, status, total } = req.body;
+        const submittedOrder = await createOrder({ userId, date, status, total });
         const orderItems = await getCartByUser(userId);
 
         if (!orderItems[0]) {
@@ -65,7 +65,7 @@ ordersRouter.post('', checkAuthorization, async (req, res, next) => {
                 message: 'Your cart is empty'
             })
         }
-        if (!order.id) {
+        if (!submittedOrder.id) {
             res.status(400);
             next({
                 error: '400',
@@ -74,16 +74,15 @@ ordersRouter.post('', checkAuthorization, async (req, res, next) => {
             })
         }
 
-        let total = 0;
         for (let item of orderItems) {
-            total += item.price;
+            addPuppyToOrder(submittedOrder.id, item.id);
         }
 
-        order.orderItems = orderItems;
-        order.total = total;
-
         deleteCart(userId);
-        res.send(order);
+
+        const completedOrder = await getOrderById(submittedOrder.id);
+
+        res.send(completedOrder);
     } catch ({ error, name, message }) {
         next({ error, name, message });
     }

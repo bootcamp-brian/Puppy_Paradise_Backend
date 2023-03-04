@@ -4,13 +4,14 @@ async function createOrder({
     userId,
     date,
     status,
+    total
 }) {
     try{
         const { rows: [order] } = await client.query(`
-            INSERT INTO orders("userId", date, status)
-            VALUES ($1, $2, $3)
+            INSERT INTO orders("userId", date, status, total)
+            VALUES ($1, $2, $3, $4)
             RETURNING *;
-        `, [userId, date, status])
+        `, [userId, date, status, total])
 
     return order;
     } catch (error) {
@@ -18,14 +19,33 @@ async function createOrder({
     }
 }
 
-async function getAllOrders() {
+async function attachItemsToOrder(order) {
     try{
         const { rows } = await client.query(`
+            SELECT order_puppies.*, puppies.name, puppies.price
+            FROM order_puppies
+            JOIN puppies ON order_puppies."puppyId" = puppies.id 
+            WHERE order_puppies."orderId"=${order.id};
+        `);
+
+        order.items = rows;
+        return order;
+    } catch (error) {
+        console.error(error)
+    }    
+}
+
+async function getAllOrders() {
+    try{
+        const { rows: orders } = await client.query(`
             SELECT *
             FROM orders
         `);
 
-        return rows;
+        const ordersWithItems = orders.map(order => {
+            return attachItemsToOrder(order);
+        })
+        return ordersWithItems;
     } catch (error) {
         console.error(error)
     }
@@ -39,7 +59,8 @@ try{
             WHERE id=$1;
         `, [id])
 
-        return order;
+        const orderWithItems = await attachItemsToOrder(order);
+        return orderWithItems;
     } catch (error) {
         console.error(error)
     }
@@ -47,13 +68,16 @@ try{
 
 async function getOrdersByUser({ id }) {
     try{
-        const { rows } = await client.query(`
+        const { rows: orders } = await client.query(`
             SELECT *
             FROM orders
             WHERE "userId"=$1;
         `, [id])
 
-        return rows;
+        const ordersWithItems = orders.map(order => {
+            return attachItemsToOrder(order);
+        })
+        return ordersWithItems;
     } catch (error) {
         console.error(error)
     }
@@ -74,19 +98,19 @@ try{
     }
 }
 
-async function deleteOrder(id) {
-    try{
-        const { rows: [ order ] } =   await client.query(`
-            DELETE FROM orders
-            WHERE id=$1
-            RETURNING *;
-    `, [id])
+// async function deleteOrder(id) {
+//     try{
+//         const { rows: [ order ] } =   await client.query(`
+//             DELETE FROM orders
+//             WHERE id=$1
+//             RETURNING *;
+//     `, [id])
 
-        return order;
-    } catch (error) {
-        console.error(error)
-    }
-}
+//         return order;
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
 module.exports = {
     createOrder,
@@ -94,5 +118,5 @@ module.exports = {
     getOrderById,
     getOrdersByUser,
     updateStatus,
-    deleteOrder
+    // deleteOrder
 };
