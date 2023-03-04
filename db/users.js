@@ -28,15 +28,18 @@ async function createUser({
 }
 
 async function getAllUsers() {
-
-  //MAP OVER ARRAY OF USERS AND attachUserData to each one, then return
   try{
       const { rows } = await client.query(`
           SELECT *
           FROM users
       `);
-  
-      return rows;
+      const users = rows.map( row => {
+        const user = attachUserData(row);
+
+        return user;
+      })
+
+      return users;
   } catch (error) {
       console.error(error)
   }
@@ -53,7 +56,7 @@ async function getUser({
     let passwordsMatch = await bcrypt.compare(password, hashedPassword) 
       if (passwordsMatch) {
         delete user.password;
-        return user;
+        return attachUserData(user);
       } else {
         return false;
     }
@@ -156,19 +159,21 @@ async function updateUser({ id, ...fields }) {
           RETURNING *;
       `, Object.values(fields));
   
-      return user;
-  } catch (error) {
+      return attachUserData(user);
+    } catch (error) {
       console.error(error)
   }
 }
 
 async function deleteUser(id) {
   try{
-    const { rows: [ order ] } =   await client.query(`
+    const { rows: [ user ] } =   await client.query(`
         DELETE FROM users
         WHERE id=$1
         RETURNING *;
   `, [id])
+
+    return user;
   } catch (error) {
       console.error(error)
   }

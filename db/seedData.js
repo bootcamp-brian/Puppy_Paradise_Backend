@@ -260,22 +260,22 @@ async function createInitialUsers() {
 async function createInitialBillingAddresses() {
     console.log("Starting to create billing addresses...")
     try {
-        const [demi, brian, andreea] = await getAllUsers()
+        const users = await getAllUsers()
         const billingAddressesToCreate = [
             {
-                "userId": demi.id,
+                "userId": users[0].id,
                 "address": "1287 Logan Drive",
                 "city": "Chattanooga",
                 "state": "TN",
                 "zip": 61556
               }, {
-                "userId": brian.id,
+                "userId": users[1].id,
                 "address": "468 Randall Lane",
                 "city": "Bellevue",
                 "state": "WA",
                 "zip": 57479
               }, {
-                "userId": andreea.id,
+                "userId": users[2].id,
                 "address": "2828 Calypso Road",
                 "city": "Schenectady",
                 "state": "NY",
@@ -298,19 +298,19 @@ async function createInitialShippingAddresses() {
         const [demi, brian, andreea] = await getAllUsers()
         const shippingAddressesToCreate = [
             {
-                "userId": demi.id,
+                "userId": users[0].id,
                 "address": "PO Box 1287",
                 "city": "Long Beach",
                 "state": "CA",
                 "zip": 90803
               }, {
-                "userId": brian.id,
+                "userId": users[1].id,
                 "address": "5761 Elka Avenue",
                 "city": "Bellevue",
                 "state": "WA",
                 "zip": 57479
               }, {
-                "userId": andreea.id,
+                "userId": users[2].id,
                 "address": "2828 Calypso Road",
                 "city": "Schenectady",
                 "state": "NY",
@@ -330,12 +330,12 @@ async function createInitialShippingAddresses() {
 async function createInitialAdmins() {
     console.log("Starting to create admins...")
     try {
-        const [demi, brian] = await getAllUsers()
+        const users = await getAllUsers()
         const adminsToCreate = [
             {
-                "userId": demi.id,
+                "userId": users[0].id,
               }, {
-                "userId": brian.id,
+                "userId": users[1].id,
               }
         ]
         const admins = await Promise.all(adminsToCreate.map(createAdmin))
@@ -351,22 +351,22 @@ async function createInitialAdmins() {
 async function createInitialOrders() {
     console.log("Starting to create orders...")
     try {
-        const [demi, brian, andreea, shurwood] = await getAllUsers()
+        const users = await getAllUsers()
         const ordersToCreate = [
             {
-                "userId": demi.id,
+                "userId": users[0].id,
                 "date": "2023-01-22 13:34:24",
                 "status": "Processing"
               }, {
-                "userId": brian.id,
+                "userId": users[1].id,
                 "date": "2022-12-04 11:03:27",
                 "status": "Completed"
               }, {
-                "userId": andreea.id,
+                "userId": users[2].id,
                 "date": "2022-07-19 22:17:57",
                 "status": "Cancelled"
               }, {
-                "userId": shurwood.id,
+                "userId": users[3].id,
                 "date": "2023-03-03 18:17:28",
                 "status": "Created"
               }
@@ -406,7 +406,7 @@ async function createInitialPuppies() {
                 "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59938051/1/?bust=1677693052&width=1080",
                 "description": "Quintissential anti-social butterfly! Dreams of laying in the sun all day and loves hiding under blankets.",
                 "age": 16,
-                "breed": "Jack Russell-Chihuahua mix",
+                "breed": "Chihuahua mix",
                 "weight": 12,
                 "size": "S",
                 "pedigree": false,
@@ -418,7 +418,7 @@ async function createInitialPuppies() {
             },{
                 "name": "Ivy",
                 "image1": "https://adopets-prod.s3.amazonaws.com/organization/pet/picture/20221030_222412_1669847052729.JPEG?width=600",
-                // "image2": "http://dummyimage.com/129x100.png/ff4444/ffffff",
+                "image2": null,
                 "description": "We'd like to introduce you to sweet Ivy! She's low to mid energy, affectionate, loves to be pet and is treat motivated. She's ready for some relaxation and lots of TLC. If you're looking for the perfect companion for short walks, movie night on the couch & the best Ivy ever without needing a green thumb, we've got the gal for you!",
                 "age": 8,
                 "breed": "Pit Bull Terrier",
@@ -433,7 +433,7 @@ async function createInitialPuppies() {
             }, {
                 "name": "Benedict",
                 "image1": "http://dummyimage.com/147x100.png/https://adopets-prod.s3.amazonaws.com/organization/pet/picture/2023018_222555_1674080755408.JPEG?width=600/ffffff",
-                // "image2": "http://dummyimage.com/106x100.png/cc0000/ffffff",
+                "image2": null,
                 "description": "This adora-bull young lad is 5 year old Benedict Cumbermutt. He's a bull terrier mix, already neutered & 75 pounds. Benedict is deaf & will need an experienced owner or someone willing to research how best to communicate with him & keep him safe. He's active, playful & loves affection. ",
                 "age": 5,
                 "breed": " Pit Bull Terrier",
@@ -567,7 +567,7 @@ async function createInitialPuppies() {
             }, {
                 "name": "Floofy",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60323924/1/?bust=1677782996&width=1080",
-                // "image2": "http://dummyimage.com/122x100.png/dddddd/000000",
+                "image2": null,
                 "description": "Floofy is happy, sweet, and loyal.  He is fully vetted, superfriendly, and loves other dogs",
                 "age": 10,
                 "breed": "Border Collie Mix",
@@ -627,7 +627,7 @@ async function createInitialPuppies() {
             }, {
                 "name": "Mookie Petts",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56555085/1/?bust=1677360430&width=1080",
-                // "image2": "http://dummyimage.com/189x100.png/cc0000/ffffff",
+                "image2": null,
                 "description": "Mookie Petts is the whole package: tall, incredibly handsome, confident, funny, athletic, smart. This 4 year old has stunning blue eyes, an awesome bushy tail, knows some basic obediance, loves to play and would be your perfect walking/ running/ hiking/ adventure buddy.",
                 "age": 4,
                 "breed": "Husky",
@@ -774,21 +774,21 @@ async function createInitialPuppies() {
 async function createInitialCarts() {
     console.log("Starting to create carts...")
     try {
-        const [demi, brian, andreea, shurwood] = await getAllUsers()
-        const [jack, bella, loretta, ozzie] = await getAllPuppies()
+        const users = await getAllUsers()
+        const puppies = await getAllPuppies()
         const cartsToCreate = [
             {
-                "userId": demi.id,
-                "puppyId": jack.id
+                "userId": users[0].id,
+                "puppyId": puppies[0].id
               }, {
-                "userId": brian.id,
-                "puppyId": bella.id
+                "userId": users[1].id,
+                "puppyId": puppies[1].id
               }, {
-                "userId": andreea.id,
-                "puppyId": loretta.id
+                "userId": users[2].id,
+                "puppyId": puppies[2].id
               }, {
-                "userId": shurwood.id,
-                "puppyId": ozzie.id
+                "userId": users[3].id,
+                "puppyId": puppies[3].id
               }
         ]
         const carts = await Promise.all(cartsToCreate.map(addItemToCart))
