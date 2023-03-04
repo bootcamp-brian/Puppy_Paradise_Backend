@@ -10,7 +10,6 @@ const {
     createAdmin,
     createResetUser,
     createInactiveUser,
-    getAllOrders,
     getOrderById,
     getOrdersByUser,
     createPuppy,
