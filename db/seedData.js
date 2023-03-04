@@ -54,7 +54,7 @@ async function createTables() {
                 address VARCHAR(255) NOT NULL,
                 city VARCHAR(255) NOT NULL,
                 state VARCHAR(255) NOT NULL,
-                zip INTEGER
+                zip INTEGER,
                 UNIQUE ("userId")
             );
         `);
@@ -65,28 +65,28 @@ async function createTables() {
                 address VARCHAR(255) NOT NULL,
                 city VARCHAR(255) NOT NULL,
                 state VARCHAR(255) NOT NULL,
-                zip INTEGER
+                zip INTEGER,
                 UNIQUE ("userId")
             );
         `);
         await client.query(`
             CREATE TABLE inactive_users (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
+                "userId" INTEGER REFERENCES users(id),
                 UNIQUE ("userId")
             );
         `);
         await client.query(`
             CREATE TABLE admins (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
+                "userId" INTEGER REFERENCES users(id),
                 UNIQUE ("userId")
             );
         `);
         await client.query(`
             CREATE TABLE reset_users (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
+                "userId" INTEGER REFERENCES users(id),
                 UNIQUE ("userId")
             );
         `);
@@ -96,7 +96,7 @@ async function createTables() {
                 "userId" INTEGER REFERENCES users(id),
                 date TIMESTAMP,
                 status VARCHAR(255) NOT NULL,
-                total NUMERIC(7,2)
+                total NUMERIC(7,2),
                 UNIQUE ("userId")
             );
         `);
