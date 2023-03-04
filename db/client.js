@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'https://localhost:5432/puppy-paradise?ssl=true';
+const connectionString = process.env.DATABASE_URL || 'https://localhost:5432/puppy-paradise';
 
 const client = new Pool({
   connectionString,
