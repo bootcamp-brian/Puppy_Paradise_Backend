@@ -3,6 +3,7 @@ const {
     createPuppy,
     addShippingAddress,
     addBillingAddress,
+    getAllPuppies,
     createAdmin,
     createOrder,
     addItemToCart,
@@ -958,8 +959,8 @@ async function createInitialPuppies() {
 async function createInitialCarts() {
     console.log("Starting to create carts...")
     try {
-        const users = await getAllUsers()
-        const puppies = await getAllPuppies()
+        const users = await getAllUsers();
+        const puppies = await getAllPuppies();
         const cartsToCreate = [
             {
                 "userId": users[0].id,
@@ -990,8 +991,8 @@ async function rebuildDB() {
         await dropTables()
         await createTables()
         await createInitialUsers()
-        await createInitialBillingAddresses()
-        await createInitialShippingAddresses()
+        // await createInitialBillingAddresses()
+        // await createInitialShippingAddresses()
         await createInitialAdmins()
         await createInitialOrders()
         await createInitialPuppies()

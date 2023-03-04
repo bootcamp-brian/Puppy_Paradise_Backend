@@ -24,10 +24,11 @@ async function createUser({
 
     delete user.password;
 
+    console.log(user)
     addShippingAddress({ userId: user.id, ...shippingAddress});
     addBillingAddress({ userId: user.id, ...billingAddress});
-    attachUserData(user);
-    return user;
+    const userWithData = await attachUserData(user);
+    return userWithData;
   } catch (error) {
     console.error(error)
   }
@@ -39,11 +40,7 @@ async function getAllUsers() {
           SELECT *
           FROM users
       `);
-      const users = rows.map( row => {
-        const user = attachUserData(row);
-
-        return user;
-      })
+      const users = await attachUsersData(rows);
 
       return users;
   } catch (error) {
@@ -62,7 +59,8 @@ async function getUser({
     let passwordsMatch = await bcrypt.compare(password, hashedPassword) 
       if (passwordsMatch) {
         delete user.password;
-        return attachUserData(user);
+        const userWithData = await attachUserData(user);
+        return userWithData;
       } else {
         return false;
     }
@@ -83,7 +81,8 @@ async function getUserById(userId) {
       return null;
     } 
 
-    return attachUserData(user);
+    const userWithData = await attachUserData(user);
+    return userWithData;
   } catch (error) {
     console.error(error)
   }
@@ -97,7 +96,8 @@ async function getUserByEmail(email) {
       WHERE email=$1;
     `, [email]);
 
-    return attachUserData(user);
+    const userWithData = await attachUserData(user);
+    return userWithData;
   } catch (error) {
     console.error(error)
   }
@@ -134,7 +134,7 @@ async function attachUserData(user) {
         FROM inactive_users
         WHERE "userId"=${userData.id};
     `);
-    const userStatus = inactiveUser.id ? 'inactive' : 'active';
+    const userStatus = inactiveUser ? 'inactive' : 'active';
 
     userData.shippingAddress = shippingAddress;
     userData.billingAddress = billingAddress;
@@ -147,6 +147,53 @@ async function attachUserData(user) {
   }
 }
 
+async function attachUsersData(users) {
+  try{
+    const { rows: shippingAddresses } = await client.query(`
+        SELECT *
+        FROM shipping_addresses
+    `);
+    const { rows: billingAddresses } = await client.query(`
+        SELECT *
+        FROM billing_addresses
+    `);
+    const { rows: allCartItems } = await client.query(`
+        SELECT *
+        FROM cart_items
+    `);
+    const { rows: inactiveUsers } = await client.query(`
+        SELECT *
+        FROM inactive_users
+    `);
+
+    const usersData = users.map(user => {
+      const userData = { ...user };
+      const shippingAddress = shippingAddresses.filter(address => address.userId === user.id);
+      const billingAddress = billingAddresses.filter(address => address.userId === user.id);
+      const cartItems = allCartItems.filter(address => address.userId === user.id);
+      let total = 0;
+      for (let item of cartItems) {
+          total += item.price;
+      }
+      const cart = {
+          cartItems,
+          total
+      }
+      const inactiveUser = inactiveUsers.filter(inactiveUser => inactiveUser.userId === user.id)
+      const userStatus = inactiveUser[0] ? 'inactive' : 'active';
+
+      userData.shippingAddress = shippingAddress[0];
+      userData.billingAddress = billingAddress[0];
+      userData.cart = cart;
+      userData.status = userStatus;
+      return userData;
+    })
+
+    return usersData;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function updateUser({ id, ...fields }) {
   try{
@@ -165,7 +212,8 @@ async function updateUser({ id, ...fields }) {
           RETURNING *;
       `, Object.values(fields));
   
-      return attachUserData(user);
+      const userWithData = await attachUserData(user);
+      return userWithData;
     } catch (error) {
       console.error(error)
   }
