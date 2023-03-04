@@ -367,6 +367,8 @@ adminRouter.post('/puppies', async (req, res, next) => {
         const {
             name,
             description,
+            image1,
+            image2,
             age,
             breed,
             weight,
@@ -381,6 +383,8 @@ adminRouter.post('/puppies', async (req, res, next) => {
         const puppy = createPuppy({
             name,
             description,
+            image1,
+            image2,
             age,
             breed,
             weight,
