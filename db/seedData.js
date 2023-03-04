@@ -165,91 +165,271 @@ async function createInitialUsers() {
                 "lastName": "zayas",
                 "email": "dzayas@live.com",
                 "password": "dontpissmeoff",
-                "phone": "7145555555" 
+                "phone": "7145555555",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             },{ 
                 "firstName": "brian", 
                 "lastName": "mui", 
                 "email": "bmui@live.com", 
                 "password": "dontpissmeoff", 
-                "phone": "5625555555" 
+                "phone": "5625555555",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             },{ 
                 "firstName": "andreea",
                 "lastName": "merloiu", 
                 "email": "amerloiu@live.com", 
                 "password": "dontpissmeoff", 
-                "phone": "3235555555" 
+                "phone": "3235555555",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                } 
             },{
                 "firstName": "Shurwood",
                 "lastName": "Livingstone",
                 "email": "slivingstone0@mozilla.org",
                 "password": "V1Ho5BQEDR",
-                "phone": "3837374157"
+                "phone": "3837374157",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Jerrold",
                 "lastName": "Bicksteth",
                 "email": "jbicksteth1@auda.org.au",
                 "password": "1N4iItFBYat",
-                "phone": "8063089890"
+                "phone": "8063089890",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Jordain",
                 "lastName": "Finlow",
                 "email": "jfinlow2@ftc.gov",
                 "password": "Sh0CHWiTpzrs",
-                "phone": "1174083606"
+                "phone": "1174083606",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Riannon",
                 "lastName": "Bernakiewicz",
                 "email": "rbernakiewicz3@independent.co.uk",
                 "password": "kR2He2i",
-                "phone": "3085608979"
+                "phone": "3085608979",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Issiah",
                 "lastName": "Morot",
                 "email": "imorot4@gmpg.org",
                 "password": "lKgVWCUF1",
-                "phone": "1714317227"
+                "phone": "1714317227",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Thorny",
                 "lastName": "Sipson",
                 "email": "tsipson5@yellowpages.com",
                 "password": "KxEH4fqW",
-                "phone": "7725687056"
+                "phone": "7725687056",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Demetri",
                 "lastName": "Ralls",
                 "email": "dralls6@statcounter.com",
                 "password": "ZaKtKedQ7",
-                "phone": "6492803440"
+                "phone": "6492803440",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Rufe",
                 "lastName": "Ensor",
                 "email": "rensor7@bizjournals.com",
                 "password": "0ORKHCminwKB",
-                "phone": "3247769222"
+                "phone": "3247769222",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Dodie",
                 "lastName": "Templeton",
                 "email": "dtempleton8@drupal.org",
                 "password": "YGbiwSWXWeh",
-                "phone": "8033231269"
+                "phone": "8033231269",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Rene",
                 "lastName": "Robard",
                 "email": "rrobard9@addthis.com",
                 "password": "4jcvFvcJHR",
-                "phone": "6013357719"
+                "phone": "6013357719",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Korie",
                 "lastName": "Peltzer",
                 "email": "kpeltzera@prnewswire.com",
                 "password": "2a31MNy",
-                "phone": "9836842056"
+                "phone": "9836842056",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }, {
                 "firstName": "Reinaldo",
                 "lastName": "Brandt",
                 "email": "rbrandtb@merriam-webster.com",
                 "password": "Zptw4S4H",
-                "phone": "4558425151"
+                "phone": "4558425151",
+                "shippingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                },
+                "billingAddress": {
+                    "address": "1287 Logan Drive",
+                    "city": "Chattanooga",
+                    "state": "TN",
+                    "zip": 61556
+                }
             }
         ]
         const users = await Promise.all(usersToCreate.map(createUser))
@@ -262,75 +442,74 @@ async function createInitialUsers() {
     }
 }
 
-async function createInitialBillingAddresses() {
-    console.log("Starting to create billing addresses...")
-    try {
-        const users = await getAllUsers()
-        const billingAddressesToCreate = [
-            {
-                "userId": users[0].id,
-                "address": "1287 Logan Drive",
-                "city": "Chattanooga",
-                "state": "TN",
-                "zip": 61556
-              }, {
-                "userId": users[1].id,
-                "address": "468 Randall Lane",
-                "city": "Bellevue",
-                "state": "WA",
-                "zip": 57479
-              }, {
-                "userId": users[2].id,
-                "address": "2828 Calypso Road",
-                "city": "Schenectady",
-                "state": "NY",
-                "zip": 47596
-              }
-        ]
-        const billingAddresses = await Promise.all(billingAddressesToCreate.map(addBillingAddress))
+// async function createInitialBillingAddresses() {
+//     console.log("Starting to create billing addresses...")
+//     try {
+//         const users = await getAllUsers()
+//         const billingAddressesToCreate = [
+//                 {
+//                 "address": "1287 Logan Drive",
+//                 "city": "Chattanooga",
+//                 "state": "TN",
+//                 "zip": 61556
+//               }, {
+//                 "userId": users[1].id,
+//                 "address": "468 Randall Lane",
+//                 "city": "Bellevue",
+//                 "state": "WA",
+//                 "zip": 57479
+//               }, {
+//                 "userId": users[2].id,
+//                 "address": "2828 Calypso Road",
+//                 "city": "Schenectady",
+//                 "state": "NY",
+//                 "zip": 47596
+//               }
+//         ]
+//         const billingAddresses = await Promise.all(billingAddressesToCreate.map(addBillingAddress))
     
-        console.log("Billing addresses created: ", billingAddresses)
-        console.log("Finished creating billing addresses!")
-    } catch (error) {
-        console.error("Error creating billing addresses!")
-        throw error
-    }
-}
+//         console.log("Billing addresses created: ", billingAddresses)
+//         console.log("Finished creating billing addresses!")
+//     } catch (error) {
+//         console.error("Error creating billing addresses!")
+//         throw error
+//     }
+// }
 
-async function createInitialShippingAddresses() {
-    console.log("Starting to create shipping addresses...")
-    try {
-        const [demi, brian, andreea] = await getAllUsers()
-        const shippingAddressesToCreate = [
-            {
-                "userId": users[0].id,
-                "address": "PO Box 1287",
-                "city": "Long Beach",
-                "state": "CA",
-                "zip": 90803
-              }, {
-                "userId": users[1].id,
-                "address": "5761 Elka Avenue",
-                "city": "Bellevue",
-                "state": "WA",
-                "zip": 57479
-              }, {
-                "userId": users[2].id,
-                "address": "2828 Calypso Road",
-                "city": "Schenectady",
-                "state": "NY",
-                "zip": 47596
-              }
-        ]
-        const shippingAddresses = await Promise.all(shippingAddressesToCreate.map(addShippingAddress))
+// async function createInitialShippingAddresses() {
+//     console.log("Starting to create shipping addresses...")
+//     try {
+//         const [demi, brian, andreea] = await getAllUsers()
+//         const shippingAddressesToCreate = [
+//             {
+//                 "userId": users[0].id,
+//                 "address": "PO Box 1287",
+//                 "city": "Long Beach",
+//                 "state": "CA",
+//                 "zip": 90803
+//               }, {
+//                 "userId": users[1].id,
+//                 "address": "5761 Elka Avenue",
+//                 "city": "Bellevue",
+//                 "state": "WA",
+//                 "zip": 57479
+//               }, {
+//                 "userId": users[2].id,
+//                 "address": "2828 Calypso Road",
+//                 "city": "Schenectady",
+//                 "state": "NY",
+//                 "zip": 47596
+//               }
+//         ]
+//         const shippingAddresses = await Promise.all(shippingAddressesToCreate.map(addShippingAddress))
     
-        console.log("Shipping addresses created: ", shippingAddresses)
-        console.log("Finished creating shipping addresses!")
-    } catch (error) {
-        console.error("Error creating shipping addresses!")
-        throw error
-    }
-}
+//         console.log("Shipping addresses created: ", shippingAddresses)
+//         console.log("Finished creating shipping addresses!")
+//     } catch (error) {
+//         console.error("Error creating shipping addresses!")
+//         throw error
+//     }
+// }
 
 async function createInitialAdmins() {
     console.log("Starting to create admins...")
