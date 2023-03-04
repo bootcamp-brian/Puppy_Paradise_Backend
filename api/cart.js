@@ -88,4 +88,4 @@ cartRouter.delete('/', checkAuthorization, async (req, res, next) => {
         next({ error, name, message });
     }
 })
-modules.export = cartRouter;
+module.export = cartRouter;

@@ -13,7 +13,6 @@ const {
     getAllOrders,
     getOrderById,
     getOrdersByUser,
-    getAllPupppies,
     createPuppy,
     updatePuppy,
     deletePuppy,
