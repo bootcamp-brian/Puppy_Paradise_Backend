@@ -54,12 +54,11 @@ cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next)
 // Removes an item from the logged in user's cart
 cartRouter.delete('/:cartItemId', checkAuthorization, async (req, res, next) => {
     try {
-        const { id: userId } = req.user;
         const { cartItemId } = req.params;
         const cartItem = await getCartItemById(cartItemId);
 
         if (cartItem.id) {
-            const deletedCartItem = await deleteCartItem({ userId, puppyId });
+            const deletedCartItem = await deleteCartItem(cartItemId);
     
             res.send(deletedCartItem);
         } else {
@@ -88,4 +87,5 @@ cartRouter.delete('/', checkAuthorization, async (req, res, next) => {
         next({ error, name, message });
     }
 })
-module.export = cartRouter;
+
+module.exports = cartRouter;

@@ -19,7 +19,7 @@ async function addItemToCart({
     }
 }
 
-async function getCartById(id) {
+async function getCartItemById(id) {
 try{
         const { rows: [ cart_item ] } = await client.query(`
             SELECT *
@@ -101,7 +101,7 @@ async function deleteCart(userId) {
 
 module.exports = {
     addItemToCart,
-    getCartById,
+    getCartItemById,
     getCartByUser,
     // updateCartItems,
     deleteCartItem,
