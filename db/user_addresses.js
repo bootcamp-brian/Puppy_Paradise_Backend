@@ -2,7 +2,7 @@ const client = require("./client");
 
 async function addShippingAddress({
     userId,
-    street,
+    address,
     city,
     state,
     zip
@@ -13,7 +13,7 @@ async function addShippingAddress({
             VALUES ($1, $2, $3, $4, $5)   
             ON CONFLICT ("userId") DO NOTHING     
             RETURNING *;
-        `, [userId, street, city, state, zip])
+        `, [userId, address, city, state, zip])
 
         return shipping_address;
     } catch (error) {
@@ -23,7 +23,7 @@ async function addShippingAddress({
 
 async function addBillingAddress({
     userId,
-    street,
+    address,
     city,
     state,
     zip
@@ -34,7 +34,7 @@ async function addBillingAddress({
             VALUES ($1, $2, $3, $4, $5)  
             ON CONFLICT ("userId") DO NOTHING      
             RETURNING *;
-        `, [userId, street, city, state, zip])
+        `, [userId, address, city, state, zip])
 
         return billing_address;
     } catch (error) {
