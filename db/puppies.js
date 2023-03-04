@@ -48,7 +48,7 @@ async function getAvailablePuppies() {
             SELECT *
             FROM puppies
             WHERE "isAvailable"=true;
-        `, [id])
+        `)
   
         return rows;
     } catch (error) {
