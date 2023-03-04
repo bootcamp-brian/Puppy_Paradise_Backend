@@ -30,13 +30,13 @@ const { checkAdmin } = require("./utils");
 
 // Checks if the user is an admin before running any of the below routes
 // alternative to putting checkAdmin in each route
-adminRouter.use('/', checkAdmin)
+// adminRouter.use('/', checkAdmin)
 
 // --- Admin functionality for users ---
 
 // GET /api/admin/users/:userId
 // Lets admin view specific user
-adminRouter.get('/users/:userId', async (req, res, next) => {
+adminRouter.get('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -57,7 +57,7 @@ adminRouter.get('/users/:userId', async (req, res, next) => {
 })
 
 // GET /api/admin/users/inactive
-adminRouter.get('/users/inactive', async (req, res, next) => {
+adminRouter.get('/users/inactive', checkAdmin, async (req, res, next) => {
     try {
         const inactiveUsers = await getAllInactiveUsers();
 
@@ -69,7 +69,7 @@ adminRouter.get('/users/inactive', async (req, res, next) => {
 
 // GET /api/admin/users
 // Lets admin view all users
-adminRouter.get('/users', async (req, res, next) => {
+adminRouter.get('/users', checkAdmin, async (req, res, next) => {
     try {
         const users = await getAllUsers();
 
@@ -81,7 +81,7 @@ adminRouter.get('/users', async (req, res, next) => {
 
 // PATCH /api/admin/users/:userId
 // Lets admin edit a specific user's info
-adminRouter.patch('/users/:userId', async (req, res, next) => {
+adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const { ...fields } = req.body;
@@ -142,7 +142,7 @@ adminRouter.patch('/users/:userId', async (req, res, next) => {
 
 // PATCH /api/admin/users/promote/:userId
 // Lets admin promote a specific user to admin status
-adminRouter.patch('/users/promote/:userId', async (req, res, next) => {
+adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -166,7 +166,7 @@ adminRouter.patch('/users/promote/:userId', async (req, res, next) => {
 
 // PATCH /api/admin/users/reset/:userId
 // Lets admin set a specific user to require a password reset
-adminRouter.patch('/users/reset/:userId', async (req, res, next) => {
+adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -190,7 +190,7 @@ adminRouter.patch('/users/reset/:userId', async (req, res, next) => {
 
 // POST /api/admin/users/reactivate/:userId
 // Lets admin reactivate an inactive user
-adminRouter.post('/users/reactivate/:userId', async (req, res, next) => {
+adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -213,7 +213,7 @@ adminRouter.post('/users/reactivate/:userId', async (req, res, next) => {
 
 // DELETE /api/admin/users/:userId
 // Lets admin mark a specific user as inactive
-adminRouter.delete('/users/:userId', async (req, res, next) => {
+adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -238,7 +238,7 @@ adminRouter.delete('/users/:userId', async (req, res, next) => {
 
 // GET /api/admin/orders/:userId
 // Lets admin view a specific user's orders
-adminRouter.get('/orders/:userId', async (req, res, next) => {
+adminRouter.get('/orders/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -261,7 +261,7 @@ adminRouter.get('/orders/:userId', async (req, res, next) => {
 
 // GET /api/admin/orders/:orderId
 // Lets admin view a specific order
-adminRouter.get('/orders/:orderId', async (req, res, next) => {
+adminRouter.get('/orders/:orderId', checkAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const order = await getOrderById(orderId);
@@ -283,7 +283,7 @@ adminRouter.get('/orders/:orderId', async (req, res, next) => {
 
 // GET /api/admin/orders
 // Lets admin view all orders
-adminRouter.get('/orders', async (req, res, next) => {
+adminRouter.get('/orders', checkAdmin, async (req, res, next) => {
     try {
         const orders = await getAllOrders();
         res.send(orders);
@@ -294,7 +294,7 @@ adminRouter.get('/orders', async (req, res, next) => {
 
 // PATCH /api/admin/orders/status/:orderId
 // Lets admin update a specific order's status
-adminRouter.patch('/orders/status/:orderId', async (req, res, next) => {
+adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const { status } = req.body;
@@ -320,7 +320,7 @@ adminRouter.patch('/orders/status/:orderId', async (req, res, next) => {
 
 // GET /api/admin/puppies
 // Shows all puppies (including unavailable ones)
-adminRouter.get('/puppies', async (req, res, next) => {
+adminRouter.get('/puppies', checkAdmin, async (req, res, next) => {
     try {
         const puppies = await getAllPupppies();
         res.send(puppies);
@@ -331,7 +331,7 @@ adminRouter.get('/puppies', async (req, res, next) => {
 
 // POST /api/admin/puppies/categories
 // Lets admin add a category for puppy sorting
-adminRouter.post('/puppies/categories', async (req, res, next) => {
+adminRouter.post('/puppies/categories', checkAdmin, async (req, res, next) => {
     try {
         const { name } = req.body;
 
@@ -364,7 +364,7 @@ adminRouter.post('/puppies/categories', async (req, res, next) => {
 
 // POST /api/admin/puppies/tagged_puppies
 // Lets admin add a specific puppy to a specific category
-adminRouter.post('/puppies/tagged_puppies', async (req, res, next) => {
+adminRouter.post('/puppies/tagged_puppies', checkAdmin, async (req, res, next) => {
     try {
         const { categoryId, puppyId } = req.body;
         const category = await getCategoryById(categoryId)
@@ -398,7 +398,7 @@ adminRouter.post('/puppies/tagged_puppies', async (req, res, next) => {
 
 // POST /api/admin/puppies
 // Lets admin create a puppy entry
-adminRouter.post('/puppies', async (req, res, next) => {
+adminRouter.post('/puppies', checkAdmin, async (req, res, next) => {
     try {
         const {
             name,
@@ -450,7 +450,7 @@ adminRouter.post('/puppies', async (req, res, next) => {
 
 // PATCH /api/admin/puppies/:puppyId
 // Lets admin update a specific puppy's info
-adminRouter.patch('/puppies/:puppyId', async (req, res, next) => {
+adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId } = req.params;
         const { ...fields } = req.body;
@@ -484,7 +484,7 @@ adminRouter.patch('/puppies/:puppyId', async (req, res, next) => {
 })
 
 // DELETE /api/admin/puppies/categories/:categoryId
-adminRouter.delete('puppies/categories/:categoryId', async (req, res, next) => {
+adminRouter.delete('puppies/categories/:categoryId', checkAdmin, async (req, res, next) => {
     try {
         const { categoryId } = req.params;
 
@@ -498,7 +498,7 @@ adminRouter.delete('puppies/categories/:categoryId', async (req, res, next) => {
 
 // DELETE /api/admin/puppies/tagged_puppies/:puppyId/:categoryId
 // Lets admin remove a puppy from a category
-adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', async (req, res, next) => {
+adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId, categoryId } = req.params;
 
@@ -512,7 +512,7 @@ adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', async (req, re
 
 // DELETE /api/admin/puppies/:puppyId
 // Lets admin mark a puppy as unavailable (which should remove it from storefront)
-adminRouter.delete('puppies/:puppyId', async (req, res, next) => {
+adminRouter.delete('puppies/:puppyId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId } = req.params;
         const puppy = await getPuppyById(puppyId);
