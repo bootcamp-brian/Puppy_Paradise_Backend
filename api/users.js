@@ -75,7 +75,7 @@ usersRouter.post('/login', async (req, res, next) => {
         const user = await getUser({ email, password });
         const resetUser = getResetUserById(user.id);
 
-        if (resetUser) {
+        if (!resetUser) {
             res.send({
                 message: "Please reset your password",
                 userId: user.id,
