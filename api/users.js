@@ -51,7 +51,7 @@ usersRouter.post('/register', async (req, res, next) => {
   
       const token = jwt.sign({ 
         id: user.id, 
-        username
+        email
       }, process.env.JWT_SECRET, {
         expiresIn: '1w'
       });
@@ -117,7 +117,7 @@ usersRouter.post('/login', async (req, res, next) => {
 });
 
 // DELETE /api/users/password_reset/:userId
-// Removes user from the reset_users table once they've reset their password
+// Removes user from the reset_users table and updates their password
 usersRouter.delete('/password_reset/:userId', async (req, res, next) => {
     try {
         const { password } = req.body;
