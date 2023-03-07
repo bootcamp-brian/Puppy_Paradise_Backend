@@ -186,16 +186,16 @@ async function createInitialUsers() {
                 "password": "dontpissmeoff", 
                 "phone": "5625555555",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "5 Vidon Drive",
+                    "city": "Fayetteville",
+                    "state": "NC",
+                    "zip": 89195
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "71537 Mesta Pass",
+                    "city": "Canton",
+                    "state": "OH",
+                    "zip": 10527
                 }
             },{ 
                 "firstName": "andreea",
@@ -204,16 +204,16 @@ async function createInitialUsers() {
                 "password": "dontpissmeoff", 
                 "phone": "3235555555",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "7242 Linden Trail",
+                    "city": "Wilmington",
+                    "state": "NC",
+                    "zip": 28689
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "7242 Linden Trail",
+                    "city": "Wilmington",
+                    "state": "NC",
+                    "zip": 28689
                 } 
             },{
                 "firstName": "Shurwood",
@@ -222,16 +222,16 @@ async function createInitialUsers() {
                 "password": "V1Ho5BQEDR",
                 "phone": "3837374157",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "59719 Goodland Terrace",
+                    "city": "Honolulu",
+                    "state": "HI",
+                    "zip": 41800
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "59719 Goodland Terrace",
+                    "city": "Honolulu",
+                    "state": "HI",
+                    "zip": 41800
                 }
             }, {
                 "firstName": "Jerrold",
@@ -240,16 +240,16 @@ async function createInitialUsers() {
                 "password": "1N4iItFBYat",
                 "phone": "8063089890",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "PO Box 536",
+                    "city": "Los Angeles",
+                    "state": "CA",
+                    "zip": 30468
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "536 4th Plaza",
+                    "city": "Los Angeles",
+                    "state": "CA",
+                    "zip": 30468
                 }
             }, {
                 "firstName": "Jordain",
@@ -258,16 +258,16 @@ async function createInitialUsers() {
                 "password": "Sh0CHWiTpzrs",
                 "phone": "1174083606",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "897 Florence Terrace",
+                    "city": "Colorado Springs",
+                    "state": "CO",
+                    "zip": 42996
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "897 Florence Terrace",
+                    "city": "Colorado Springs",
+                    "state": "CO",
+                    "zip": 42996
                 }
             }, {
                 "firstName": "Riannon",
@@ -276,16 +276,16 @@ async function createInitialUsers() {
                 "password": "kR2He2i",
                 "phone": "3085608979",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1882 Maywood Plaza",
+                    "city": "Pensacola",
+                    "state": "FL",
+                    "zip": 24844
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1882 Maywood Plaza",
+                    "city": "Pensacola",
+                    "state": "FL",
+                    "zip": 24844
                 }
             }, {
                 "firstName": "Issiah",
@@ -294,16 +294,16 @@ async function createInitialUsers() {
                 "password": "lKgVWCUF1",
                 "phone": "1714317227",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "037 Jenna Center",
+                    "city": "Oceanside",
+                    "state": "CA",
+                    "zip": 84015
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "037 Jenna Center",
+                    "city": "Oceanside",
+                    "state": "CA",
+                    "zip": 84015
                 }
             }, {
                 "firstName": "Thorny",
@@ -312,16 +312,16 @@ async function createInitialUsers() {
                 "password": "KxEH4fqW",
                 "phone": "7725687056",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "32 Saint Paul Drive",
+                    "city": "Pueblo",
+                    "state": "CO",
+                    "zip": 73665
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "6 Jana Alley",
+                    "city": "Falls Church",
+                    "state": "VA",
+                    "zip": 42223
                 }
             }, {
                 "firstName": "Demetri",
@@ -330,16 +330,16 @@ async function createInitialUsers() {
                 "password": "ZaKtKedQ7",
                 "phone": "6492803440",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1882 Maywood Plaza",
+                    "city": "Pensacola",
+                    "state": "FL",
+                    "zip": 24844
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1882 Maywood Plaza",
+                    "city": "Pensacola",
+                    "state": "FL",
+                    "zip": 24844
                 }
             }, {
                 "firstName": "Rufe",
@@ -348,16 +348,16 @@ async function createInitialUsers() {
                 "password": "0ORKHCminwKB",
                 "phone": "3247769222",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "2 Oak Parkway",
+                    "city": "Pittsburgh",
+                    "state": "PA",
+                    "zip": 58910
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "2 Oak Parkway",
+                    "city": "Pittsburgh",
+                    "state": "PA",
+                    "zip": 58910
                 }
             }, {
                 "firstName": "Dodie",
@@ -366,16 +366,16 @@ async function createInitialUsers() {
                 "password": "YGbiwSWXWeh",
                 "phone": "8033231269",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "641 Lighthouse Bay Alley",
+                    "city": "Springfield",
+                    "state": "IL",
+                    "zip": 84637
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "641 Lighthouse Bay Alley",
+                    "city": "Springfield",
+                    "state": "IL",
+                    "zip": 84637
                 }
             }, {
                 "firstName": "Rene",
@@ -384,16 +384,16 @@ async function createInitialUsers() {
                 "password": "4jcvFvcJHR",
                 "phone": "6013357719",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "53 Crescent Oaks Alley",
+                    "city": "West Palm Beach",
+                    "state": "FL",
+                    "zip": 33194
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "59 Arrowood Hill",
+                    "city": "Norwalk",
+                    "state": "CT",
+                    "zip": 27428
                 }
             }, {
                 "firstName": "Korie",
@@ -402,16 +402,16 @@ async function createInitialUsers() {
                 "password": "2a31MNy",
                 "phone": "9836842056",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1 Dorton Avenue",
+                    "city": "Fort Worth",
+                    "state": "TX",
+                    "zip": 42128
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "1 Dorton Avenue",
+                    "city": "Fort Worth",
+                    "state": "TX",
+                    "zip": 42128
                 }
             }, {
                 "firstName": "Reinaldo",
@@ -420,16 +420,16 @@ async function createInitialUsers() {
                 "password": "Zptw4S4H",
                 "phone": "4558425151",
                 "shippingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "PO Box 646",
+                    "city": "Bronx",
+                    "state": "NY",
+                    "zip": 75684
                 },
                 "billingAddress": {
-                    "address": "1287 Logan Drive",
-                    "city": "Chattanooga",
-                    "state": "TN",
-                    "zip": 61556
+                    "address": "6 Meadow Vale Plaza",
+                    "city": "Bronx",
+                    "state": "NY",
+                    "zip": 75684
                 }
             }
         ]
