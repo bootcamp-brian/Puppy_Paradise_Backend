@@ -12,7 +12,7 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
 
         const order = await getOrderById(orderId);
 
-        if (!order.id) {
+        if (!order) {
             res.status(400);
             next({
                 error: '404',

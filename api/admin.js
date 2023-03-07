@@ -40,7 +40,7 @@ adminRouter.get('/users/:userId', checkAdmin, async (req, res, next) => {
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -87,7 +87,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
 
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -109,7 +109,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
             } else {
                 const updatedUser = await updateUser({ userId, ...fields });
     
-                if (!updatedUser.id) {
+                if (!updatedUser) {
                     res.status(400);
                     next({
                         error: '400',
@@ -123,7 +123,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
         } else {
             const updatedUser = await updateUser({ userId, ...fields });
 
-            if (!updatedUser.id) {
+            if (!updatedUser) {
                 res.status(400);
                 next({
                     error: '400',
@@ -146,7 +146,7 @@ adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) =
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -170,7 +170,7 @@ adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => 
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -194,7 +194,7 @@ adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next)
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -203,7 +203,7 @@ adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next)
             })
         } else {
             const reactivatedUser = deleteInactiveUser(userId);
-            res.send(reactivated);
+            res.send(reactivatedUser);
         }
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -217,7 +217,7 @@ adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -242,7 +242,7 @@ adminRouter.get('/orders/:userId', checkAdmin, async (req, res, next) => {
         const { userId } = req.params;
         const user = await getUserById(userId);
 
-        if (!user.id) {
+        if (!user) {
             res.status(404);
             next({
                 error: '404',
@@ -265,7 +265,7 @@ adminRouter.get('/orders/:orderId', checkAdmin, async (req, res, next) => {
         const { orderId } = req.params;
         const order = await getOrderById(orderId);
 
-        if (!order.id) {
+        if (!order) {
             res.status(404);
             next({
                 error: '404',
@@ -299,7 +299,7 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
         const { status } = req.body;
         const order = await getOrderById(orderId);
 
-        if (!order.id) {
+        if (!order) {
             res.status(404);
             next({
                 error: '404',
@@ -345,7 +345,7 @@ adminRouter.post('/puppies/categories', checkAdmin, async (req, res, next) => {
             const category = createCategory(name);
     
             // only reason to not get a category.id back at this point is because it already exists and there should be a UNIQUE conflict
-            if (!category.id) {
+            if (!category) {
                 res.status(400);
                 next({
                     error: '400',
@@ -368,7 +368,7 @@ adminRouter.post('/puppies/tagged_puppies', checkAdmin, async (req, res, next) =
         const { categoryId, puppyId } = req.body;
         const category = await getCategoryById(categoryId)
         
-        if (!category.id) {
+        if (!category) {
             res.status(404);
             next({
                 error: '404',
@@ -379,7 +379,7 @@ adminRouter.post('/puppies/tagged_puppies', checkAdmin, async (req, res, next) =
 
         const puppy = await getPuppyById(puppyId);
 
-        if (!puppy.id) {
+        if (!puppy) {
             res.status(404);
             next({
                 error: '404',
@@ -432,7 +432,7 @@ adminRouter.post('/puppies', checkAdmin, async (req, res, next) => {
             price
         });
 
-        if (!puppy.id) {
+        if (!puppy) {
             res.status(400);
             next({
                 error: '400',
@@ -456,7 +456,7 @@ adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
 
         const puppy = await getPuppyById(puppyId);
 
-        if (!puppy.id) {
+        if (!puppy) {
             res.status(404);
             next({
                 error: '404',
@@ -466,7 +466,7 @@ adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
         } else {
             const updatedPuppy = await updatePuppy({ puppyId, ...fields });
 
-            if (!updatedPuppy.id) {
+            if (!updatedPuppy) {
                 res.status(400);
                 next({
                     error: '400',
@@ -516,7 +516,7 @@ adminRouter.delete('puppies/:puppyId', checkAdmin, async (req, res, next) => {
         const { puppyId } = req.params;
         const puppy = await getPuppyById(puppyId);
 
-        if (!puppy.id) {
+        if (!puppy) {
             res.status(404);
             next({
                 error: '404',

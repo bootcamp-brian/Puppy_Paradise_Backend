@@ -154,7 +154,7 @@ usersRouter.get('/me', checkAuthorization, async (req, res, next) => {
 // Edits a logged in user's info
 usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
     try {
-        const { id: userId } = req.user
+        const { id: userId } = req.user;
         const { ...fields } = req.body;
 
         const user = await getUserById(userId);
@@ -179,7 +179,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
             } else {
                 const updatedUser = await updateUser({ userId, ...fields });
     
-                if (!updatedUser.id) {
+                if (!updatedUser) {
                     next({
                         error: '400',
                         name: 'UserUpdateError',
@@ -192,7 +192,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
         } else {
             const updatedUser = await updateUser({ userId, ...fields });
 
-            if (!updatedUser.id) {
+            if (!updatedUser) {
                 res.status(400);
                 next({
                     error: '400',

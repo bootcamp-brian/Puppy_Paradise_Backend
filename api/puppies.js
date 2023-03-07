@@ -34,7 +34,7 @@ puppiesRouter.get('/:puppyId', async (req, res, next) => {
         const { puppyId } = req.params;
         const puppy = await getPuppyById(puppyId);
 
-        if (!puppy.id) {
+        if (!puppy) {
             res.status(404);
             next({
                 error: '404',
