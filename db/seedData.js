@@ -9,7 +9,7 @@ const {
     addItemToCart,
 } = require('./');
 const client = require("./client");
-const { getAllUsers } = require('./users');
+const { getAllUsers, getUserByEmail } = require('./users');
 
 async function dropTables() {
     try {
@@ -515,12 +515,13 @@ async function createInitialUsers() {
 async function createInitialAdmins() {
     console.log("Starting to create admins...")
     try {
-        const users = await getAllUsers()
+        const demi = await getUserByEmail("dzayas@live.com")
+        const brian = await getUserByEmail("bmui@live.com")
         const adminsToCreate = [
             {
-                "userId": users[0].id,
-              }, {
-                "userId": users[1].id,
+                "userId": demi.id,
+            }, {
+                "userId": brian.id,
               }
         ]
         const admins = await Promise.all(adminsToCreate.map(createAdmin))
