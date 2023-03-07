@@ -71,5 +71,6 @@ async function deleteResetUser(userId, password) {
 module.exports = {
     createResetUser,
     // getAllResetUsers,
-    deleteResetUser
+    deleteResetUser,
+    getResetUserById
 };
