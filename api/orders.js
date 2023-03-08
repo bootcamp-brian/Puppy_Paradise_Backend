@@ -1,11 +1,12 @@
 const express = require("express");
+const { de } = require("faker/lib/locales");
 const ordersRouter = express.Router();
-const { getOrderById, getOrdersByUser, createOrder, addPuppyToOrder, getCartByUser } = require('../db');
+const { getOrderById, getOrdersByUser, createOrder, addPuppyToOrder, getCartByUser, deleteCart, getUserByEmail, deleteCartItemsByPuppy } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // GET /api/orders/:orderId
 // Gets a specific order (must be an order that belongs to the logged in user)
-ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
+ordersRouter.get('/:orderId', checkAuthorization, async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const { id: userId } = req.user;
@@ -38,9 +39,9 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
 // Gets all orders of logged in user
 ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
     try {
-        const { id: userId } = req.user;
+        const { id } = req.user;
 
-        const orders = await getOrdersByUser(userId);
+        const orders = await getOrdersByUser({ id });
 
         res.send(orders);
     } catch ({ error, name, message }) {
@@ -50,11 +51,11 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
 
 // POST /api/orders
 // Creates a new order for logged in user, and clears their cart
-ordersRouter.post('', checkAuthorization, async (req, res, next) => {
+ordersRouter.post('/', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
-        const { date, status, total } = req.body;
-        const submittedOrder = await createOrder({ userId, date, status, total });
+
+        const { date } = req.body;
         const orderItems = await getCartByUser(userId);
 
         if (!orderItems[0]) {
@@ -65,6 +66,25 @@ ordersRouter.post('', checkAuthorization, async (req, res, next) => {
                 message: 'Your cart is empty'
             })
         }
+
+        let total = 0;
+        for (let item of orderItems) {
+            if (!item.isAvailable) {
+                deleteCartItemsByPuppy(item.puppyId)
+                res.status(400)
+                next({
+                    error:'400',
+                    name: "PuppyUnavailableError",
+                    message: `${item.name} is no longer available`
+                })
+            }
+            total += Number(item.price);
+        }
+
+        const status = "Created";
+
+        const submittedOrder = await createOrder({ userId, date, status, total });
+
         if (!submittedOrder.id) {
             res.status(400);
             next({
@@ -75,7 +95,7 @@ ordersRouter.post('', checkAuthorization, async (req, res, next) => {
         }
 
         for (let item of orderItems) {
-            addPuppyToOrder(submittedOrder.id, item.id);
+            await addPuppyToOrder({ orderId: submittedOrder.id, puppyId: item.puppyId });
         }
 
         deleteCart(userId);

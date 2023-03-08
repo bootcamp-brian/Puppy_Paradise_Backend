@@ -123,7 +123,7 @@ async function attachUserData(user) {
     `);
     let total = 0;
     for (let item of cartItems) {
-        total += item.price;
+        total += Number(item.price);
     }
     const cart = {
         cartItems,
@@ -173,7 +173,7 @@ async function attachUsersData(users) {
       const cartItems = allCartItems.filter(address => address.userId === user.id);
       let total = 0;
       for (let item of cartItems) {
-          total += item.price;
+          total += Number(item.price);
       }
       const cart = {
           cartItems,
@@ -212,6 +212,7 @@ async function updateUser({ id, ...fields }) {
           RETURNING *;
       `, Object.values(fields));
   
+      delete user.password;
       const userWithData = await attachUserData(user);
       return userWithData;
     } catch (error) {

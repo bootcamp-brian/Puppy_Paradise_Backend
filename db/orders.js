@@ -7,7 +7,7 @@ async function createOrder({
     total
 }) {
     try{
-        const { rows: [order] } = await client.query(`
+        const { rows: [ order ] } = await client.query(`
             INSERT INTO orders("userId", date, status, total)
             VALUES ($1, $2, $3, $4)
             RETURNING *;
@@ -42,9 +42,23 @@ async function getAllOrders() {
             FROM orders
         `);
 
+        const { rows: order_puppies } = await client.query(`
+            SELECT order_puppies.*, puppies.name, puppies.price
+            FROM order_puppies
+            JOIN puppies ON order_puppies."puppyId" = puppies.id 
+        `);
+
         const ordersWithItems = orders.map(order => {
-            return attachItemsToOrder(order);
+            const orderItems = [];
+            for (let item of order_puppies) {
+                if (item.orderId === order.id) {
+                    orderItems.push(item);
+                }
+            }
+            order.items = orderItems;
+            return order;
         })
+
         return ordersWithItems;
     } catch (error) {
         console.error(error)
@@ -74,9 +88,23 @@ async function getOrdersByUser({ id }) {
             WHERE "userId"=$1;
         `, [id])
 
+        const { rows: order_puppies } = await client.query(`
+            SELECT order_puppies.*, puppies.name, puppies.price
+            FROM order_puppies
+            JOIN puppies ON order_puppies."puppyId" = puppies.id 
+        `);
+
         const ordersWithItems = orders.map(order => {
-            return attachItemsToOrder(order);
+            const orderItems = [];
+            for (let item of order_puppies) {
+                if (item.orderId === order.id) {
+                    orderItems.push(item);
+                }
+            }
+            order.items = orderItems;
+            return order;
         })
+
         return ordersWithItems;
     } catch (error) {
         console.error(error)
@@ -87,8 +115,8 @@ async function updateStatus({ id, status }) {
 try{
         const { rows: [ order ] } = await client.query(`
             UPDATE orders
-            SET status=${status}
-            WHERE id=${id}
+            SET status=$2
+            WHERE id=$1
             RETURNING *;
         `, [id, status]);
 

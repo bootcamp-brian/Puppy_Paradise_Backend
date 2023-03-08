@@ -23,7 +23,8 @@ const {
     getAllInactiveUsers,
     deleteInactiveUser,
     deletePuppyFromCategory,
-    deleteCategory
+    deleteCategory,
+    getAllPuppies
 } = require('../db');
 const { checkAdmin } = require("./utils");
 
@@ -32,6 +33,17 @@ const { checkAdmin } = require("./utils");
 // adminRouter.use('/', checkAdmin)
 
 // --- Admin functionality for users ---
+
+// GET /api/admin/users/inactive
+adminRouter.get('/users/inactive', checkAdmin, async (req, res, next) => {
+    try {
+        const inactiveUsers = await getAllInactiveUsers();
+
+        res.send(inactiveUsers);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
 
 // GET /api/admin/users/:userId
 // Lets admin view specific user
@@ -55,17 +67,6 @@ adminRouter.get('/users/:userId', checkAdmin, async (req, res, next) => {
     } 
 })
 
-// GET /api/admin/users/inactive
-adminRouter.get('/users/inactive', checkAdmin, async (req, res, next) => {
-    try {
-        const inactiveUsers = await getAllInactiveUsers();
-
-        res.send(inactiveUsers);
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
-
 // GET /api/admin/users
 // Lets admin view all users
 adminRouter.get('/users', checkAdmin, async (req, res, next) => {
@@ -73,6 +74,54 @@ adminRouter.get('/users', checkAdmin, async (req, res, next) => {
         const users = await getAllUsers();
 
         res.send(users);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// PATCH /api/admin/users/promote/:userId
+// Lets admin promote a specific user to admin status
+adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await getUserById(userId);
+
+        if (!user) {
+            res.status(404);
+            next({
+                error: '404',
+                name: 'UserNotFoundError',
+                message: 'User not found'
+            })
+        } else {
+            // need a function that adds a row to admins table using the userId parameter to fill in the "userId" column
+            const newAdmin = await createAdmin({ userId });
+            res.send(newAdmin);
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// PATCH /api/admin/users/reset/:userId
+// Lets admin set a specific user to require a password reset
+adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await getUserById(userId);
+
+        if (!user) {
+            res.status(404);
+            next({
+                error: '404',
+                name: 'UserNotFoundError',
+                message: 'User not found'
+            })
+        } else {
+            // need a function that adds a row to reset_users table using the userId parameter to fill in the "userId" column
+            const targetUser = await createResetUser(userId);
+            res.send(targetUser);
+        }
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 
@@ -99,7 +148,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
         if (req.body.email) {
             const userByEmail = await getUserByEmail(req.body.email);
 
-            if (userByEmail.id && userByEmail.id !== userId) {
+            if (userByEmail && userByEmail.id !== userId) {
                 res.status(403);
                 next({
                     error: '403',
@@ -107,7 +156,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
                     message: 'That email is already in use'
                 })
             } else {
-                const updatedUser = await updateUser({ userId, ...fields });
+                const updatedUser = await updateUser({ id: userId, ...fields });
     
                 if (!updatedUser) {
                     res.status(400);
@@ -121,7 +170,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
                 }
             }
         } else {
-            const updatedUser = await updateUser({ userId, ...fields });
+            const updatedUser = await updateUser({ id: userId, ...fields });
 
             if (!updatedUser) {
                 res.status(400);
@@ -133,54 +182,6 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
             } else {
                 res.send(updatedUser);
             }
-        }
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
-
-// PATCH /api/admin/users/promote/:userId
-// Lets admin promote a specific user to admin status
-adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) => {
-    try {
-        const { userId } = req.params;
-        const user = await getUserById(userId);
-
-        if (!user) {
-            res.status(404);
-            next({
-                error: '404',
-                name: 'UserNotFoundError',
-                message: 'User not found'
-            })
-        } else {
-            // need a function that adds a row to admins table using the userId parameter to fill in the "userId" column
-            const newAdmin = createAdmin(userId);
-            res.send(newAdmin);
-        }
-    } catch ({ error, name, message }) {
-        next({ error, name, message });
-    } 
-})
-
-// PATCH /api/admin/users/reset/:userId
-// Lets admin set a specific user to require a password reset
-adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => {
-    try {
-        const { userId } = req.params;
-        const user = await getUserById(userId);
-
-        if (!user) {
-            res.status(404);
-            next({
-                error: '404',
-                name: 'UserNotFoundError',
-                message: 'User not found'
-            })
-        } else {
-            // need a function that adds a row to reset_users table using the userId parameter to fill in the "userId" column
-            const targetUser = createResetUser(userId);
-            res.send(targetUser);
         }
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -202,7 +203,7 @@ adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next)
                 message: 'User not found'
             })
         } else {
-            const reactivatedUser = deleteInactiveUser(userId);
+            const reactivatedUser = await deleteInactiveUser(userId);
             res.send(reactivatedUser);
         }
     } catch ({ error, name, message }) {
@@ -225,7 +226,7 @@ adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
                 message: 'User not found'
             })
         } else {
-            const deletedUser = createInactiveUser(userId);
+            const deletedUser = await createInactiveUser({ userId });
             res.send(deletedUser);
         }
     } catch ({ error, name, message }) {
@@ -235,9 +236,9 @@ adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
 
 // --- Admin functionality for orders ---
 
-// GET /api/admin/orders/:userId
+// GET /api/admin/orders/users/:userId
 // Lets admin view a specific user's orders
-adminRouter.get('/orders/:userId', checkAdmin, async (req, res, next) => {
+adminRouter.get('/orders/users/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await getUserById(userId);
@@ -250,7 +251,7 @@ adminRouter.get('/orders/:userId', checkAdmin, async (req, res, next) => {
                 message: 'User not found'
             })
         } else {
-            const orders = await getOrdersByUser();
+            const orders = await getOrdersByUser({ id: userId });
             res.send(orders);
         }
     } catch ({ error, name, message }) {
@@ -307,7 +308,7 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
                 message: 'Order not found'
             })
         } else {
-            const updatedOrder = await updateStatus({ id: orderId, status })
+            const updatedOrder = await updateStatus({ id: orderId, status });
             res.send(updatedOrder);
         }
     } catch ({ error, name, message }) {
@@ -321,7 +322,7 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
 // Shows all puppies (including unavailable ones)
 adminRouter.get('/puppies', checkAdmin, async (req, res, next) => {
     try {
-        const puppies = await getAllPupppies();
+        const puppies = await getAllPuppies();
         res.send(puppies);
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -342,7 +343,7 @@ adminRouter.post('/puppies/categories', checkAdmin, async (req, res, next) => {
                 message: 'That is not a valid category name'
             })
         } else {
-            const category = createCategory(name);
+            const category = await createCategory(name);
     
             // only reason to not get a category.id back at this point is because it already exists and there should be a UNIQUE conflict
             if (!category) {
@@ -388,7 +389,7 @@ adminRouter.post('/puppies/tagged_puppies', checkAdmin, async (req, res, next) =
             })
         }
 
-        const taggedPuppy = addPuppyToCategory(categoryId, puppyId);
+        const taggedPuppy = await addPuppyToCategory({ categoryId, puppyId });
         res.send(taggedPuppy)
     } catch ({ error, name, message }) {
         next({ error, name, message });
@@ -415,7 +416,7 @@ adminRouter.post('/puppies', checkAdmin, async (req, res, next) => {
             isAvailable,
             price
         } = req.body;
-        const puppy = createPuppy({
+        const puppy = await createPuppy({
             name,
             description,
             image1,
@@ -464,7 +465,7 @@ adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
                 message: 'Puppy not found'
             })
         } else {
-            const updatedPuppy = await updatePuppy({ puppyId, ...fields });
+            const updatedPuppy = await updatePuppy({ id: puppyId, ...fields });
 
             if (!updatedPuppy) {
                 res.status(400);
@@ -483,7 +484,8 @@ adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
 })
 
 // DELETE /api/admin/puppies/categories/:categoryId
-adminRouter.delete('puppies/categories/:categoryId', checkAdmin, async (req, res, next) => {
+// Lets admin delete a category
+adminRouter.delete('/puppies/categories/:categoryId', checkAdmin, async (req, res, next) => {
     try {
         const { categoryId } = req.params;
 
@@ -497,7 +499,7 @@ adminRouter.delete('puppies/categories/:categoryId', checkAdmin, async (req, res
 
 // DELETE /api/admin/puppies/tagged_puppies/:puppyId/:categoryId
 // Lets admin remove a puppy from a category
-adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, async (req, res, next) => {
+adminRouter.delete('/puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId, categoryId } = req.params;
 
@@ -511,7 +513,7 @@ adminRouter.delete('puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, as
 
 // DELETE /api/admin/puppies/:puppyId
 // Lets admin mark a puppy as unavailable (which should remove it from storefront)
-adminRouter.delete('puppies/:puppyId', checkAdmin, async (req, res, next) => {
+adminRouter.delete('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId } = req.params;
         const puppy = await getPuppyById(puppyId);

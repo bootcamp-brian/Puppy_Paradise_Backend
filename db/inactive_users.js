@@ -29,13 +29,31 @@ async function getAllInactiveUsers() {
     }
 }
 
-async function deleteInactiveUser(id) {
+async function getInactiveUserById(userId) {
+    try{
+        const { rows: [ user ] } = await client.query(`
+            SELECT * 
+            FROM inactive_users
+            WHERE "userId"=${ userId };
+        `);
+  
+        if (user) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+      console.error(error)
+    }
+}
+
+async function deleteInactiveUser(userId) {
     try{
         const { rows: [ inactive_user ] } =   await client.query(`
             DELETE FROM inactive_users
-            WHERE id=$1
+            WHERE "userId"=$1
             RETURNING *;
-    `, [id])
+    `, [userId])
 
         return inactive_user;
     } catch (error) {
@@ -46,5 +64,6 @@ async function deleteInactiveUser(id) {
 module.exports = {
     createInactiveUser,
     getAllInactiveUsers,
-    deleteInactiveUser
+    deleteInactiveUser,
+    getInactiveUserById
 };

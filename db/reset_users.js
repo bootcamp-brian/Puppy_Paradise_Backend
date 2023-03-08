@@ -1,4 +1,6 @@
 const client = require("./client")
+const bcrypt = require('bcrypt');
+const SALT_COUNT = 10;
 
 async function createResetUser(userId) {
     try{
@@ -35,7 +37,7 @@ async function getResetUserById(userId) {
             WHERE "userId"=${ userId };
         `);
   
-        if (user.id) {
+        if (user) {
             return true;
         } else {
             return false;
@@ -47,22 +49,37 @@ async function getResetUserById(userId) {
 
 async function deleteResetUser(userId, password) {
     try{
-        const { rows: [ reset_user ] } =   await client.query(`
-            DELETE FROM reset_users
-            WHERE id=$1
-            RETURNING *;
+        const { rows: [ user ] } = await client.query(`
+        SELECT *
+        FROM users
+        WHERE id=$1
         `, [userId])
 
-        const { rows: [ user ]} = await client.query(`
-            UPDATE users
-            SET "password"=${password}
-            WHERE id=${userId}
-            RETURNING *;
-        `)
+        const hashedPassword = user.password;
 
-        delete user.password;
-
-        return user;
+        let passwordsMatch = await bcrypt.compare(password, hashedPassword) 
+        if (!passwordsMatch) {
+            
+            const newHashedPassword = await bcrypt.hash(password, SALT_COUNT);
+            const { rows: [ reset_user ] } = await client.query(`
+                DELETE FROM reset_users
+                WHERE "userId"=$1
+                RETURNING *;
+            `, [userId])
+    
+            const { rows: [ updatedUser ]} = await client.query(`
+                UPDATE users
+                SET "password"=$1
+                WHERE id=$2
+                RETURNING *;
+            `, [ newHashedPassword, userId ])
+    
+            delete updatedUser.password;
+    
+            return updatedUser;
+        } else {
+            return false;
+        }
     } catch (error) {
         console.error(error)
     }

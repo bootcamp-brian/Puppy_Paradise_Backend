@@ -97,8 +97,7 @@ async function createTables() {
                 "userId" INTEGER REFERENCES users(id),
                 date TIMESTAMP,
                 status VARCHAR(255) NOT NULL,
-                total NUMERIC(7,2),
-                UNIQUE ("userId")
+                total NUMERIC(7,2)
             );
         `);
         await client.query(`
@@ -123,9 +122,9 @@ async function createTables() {
         await client.query(`
             CREATE TABLE order_puppies (
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id),
+                "orderId" INTEGER REFERENCES orders(id),
                 "puppyId" INTEGER REFERENCES puppies(id),
-                UNIQUE ("userId", "puppyId")
+                UNIQUE ("orderId", "puppyId")
             );
         `);
         await client.query(`
@@ -538,11 +537,13 @@ async function createInitialOrders() {
     console.log("Starting to create orders...")
     try {
         const users = await getAllUsers()
+        const brian = await getUserByEmail("bmui@live.com")
         const ordersToCreate = [
             {
-                "userId": users[0].id,
+                "userId": brian.id,
                 "date": "2023-01-22 13:34:24",
-                "status": "Processing"
+                "status": "Processing",
+                "total": 1111.11
               }, {
                 "userId": users[1].id,
                 "date": "2022-12-04 11:03:27",
@@ -585,7 +586,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 800
+                "price": 800.99
             },{
                 "name": "Bella",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59938051/2/?bust=1677693053&width=1080",
@@ -600,7 +601,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 800
+                "price": 800.99
             },{
                 "name": "Ivy",
                 "image1": "https://adopets-prod.s3.amazonaws.com/organization/pet/picture/20221030_222412_1669847052729.JPEG?width=600",
@@ -615,7 +616,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 445
+                "price": 445.99
             }, {
                 "name": "Benedict",
                 "image1": "http://dummyimage.com/147x100.png/https://adopets-prod.s3.amazonaws.com/organization/pet/picture/2023018_222555_1674080755408.JPEG?width=600/ffffff",
@@ -630,7 +631,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 295
+                "price": 295.99
             }, {
                 "name": "Fluffy",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59944536/5/?bust=1676348193&width=560",
@@ -644,7 +645,7 @@ async function createInitialPuppies() {
                 "isVaccinated": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 480
+                "price": 480.99
             }, {
                 "name": "Kylo",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60151109/1/?bust=1677387886&width=560",
@@ -659,7 +660,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 375
+                "price": 375.99
             }, {
                 "name": "Nova",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58674444/1/?bust=1666857003&width=560",
@@ -674,7 +675,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 990
+                "price": 990.99
             }, {
                 "name": "Jinny",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53485343/1/?bust=1636195509&width=560",
@@ -689,7 +690,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": false,
-                "price": 250
+                "price": 250.99
             }, {
                 "name": "Remi",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59524983/4/?bust=1674357559&width=560",
@@ -704,7 +705,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 325
+                "price": 325.99
             }, {
                 "name": "Ozzie",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59312072/1/?bust=1672522867&width=1080",
@@ -719,7 +720,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 388
+                "price": 388.99
             }, {
                 "name": "Loretta",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58883608/6/?bust=1677293290&width=1080",
@@ -734,7 +735,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": false,
-                "price": 360
+                "price": 360.99
             }, {
                 "name": "Carlisle",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60006416/1/?bust=1677723327&width=1080",
@@ -749,7 +750,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": false,
-                "price": 280
+                "price": 280.99
             }, {
                 "name": "Floofy",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60323924/1/?bust=1677782996&width=1080",
@@ -764,7 +765,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 415
+                "price": 415.99
             }, {
                 "name": "Rainbow",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53674463/1/?bust=1637872138&width=1080",
@@ -779,7 +780,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": false,
-                "price": 210
+                "price": 210.99
             }, {
                 "name": "Abby",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58579859/2/?bust=1666119640&width=1080",
@@ -794,7 +795,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 475
+                "price": 475.99
             }, {
                 "name": "Raven",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52121837/1/?bust=1670283487&width=1080",
@@ -809,7 +810,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 460
+                "price": 460.99
             }, {
                 "name": "Mookie Petts",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56555085/1/?bust=1677360430&width=1080",
@@ -824,7 +825,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": false,
-                "price": 580
+                "price": 580.99
             }, {
                 "name": "Amaya",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/55191980/3/?bust=1648939358&width=1080",
@@ -839,7 +840,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 372
+                "price": 372.99
             }, {
                 "name": "Rayne",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60074426/1/?bust=1677348309&width=1080",
@@ -854,7 +855,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 320
+                "price": 320.99
             }, {
                 "name": "Jasper",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58651111/1/?bust=1677348141&width=1080",
@@ -869,7 +870,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": false,
-                "price": 395
+                "price": 395.99
             }, {
                 "name": "Rhonda",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58608575/2/?bust=1677802221&width=1080",
@@ -884,7 +885,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 415
+                "price": 415.99
             }, {
                 "name": "Glenn",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/57474417/1/?bust=1677348427&width=1080",
@@ -899,7 +900,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 430
+                "price": 430.99
             }, {
                 "name": "Kit Kat",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59717197/6/?bust=1674705636&width=1080",
@@ -914,7 +915,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": true,
-                "price": 560
+                "price": 560.99
             }, {
                 "name": "Hachi",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59891377/2/?bust=1675918305&width=1080",
@@ -929,7 +930,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Male",
                 "isAvailable": true,
-                "price": 520
+                "price": 520.99
             }, {
                 "name": "Elvie",
                 "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59910010/1/?bust=1677562505&width=1080",
@@ -944,7 +945,7 @@ async function createInitialPuppies() {
                 "isAltered": true,
                 "gender": "Female",
                 "isAvailable": false,
-                "price": 260
+                "price": 260.99
             }
         ]
         const puppies = await Promise.all(puppiesToCreate.map(createPuppy))
@@ -962,9 +963,10 @@ async function createInitialCarts() {
     try {
         const users = await getAllUsers();
         const puppies = await getAllPuppies();
+        const brian = await getUserByEmail("bmui@live.com")
         const cartsToCreate = [
             {
-                "userId": users[0].id,
+                "userId": brian.id,
                 "puppyId": puppies[0].id
               }, {
                 "userId": users[1].id,

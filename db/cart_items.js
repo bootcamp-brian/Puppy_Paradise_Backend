@@ -33,14 +33,14 @@ try{
     }
 }
 
-async function getCartByUser({ id }) {
+async function getCartByUser(userId) {
     try{
         const { rows } = await client.query(`
-            SELECT puppies.*, cart_items.userId
+            SELECT cart_items.*, puppies.name, puppies.price, puppies.image1, puppies."isAvailable"
             FROM cart_items
             JOIN puppies ON cart_items."puppyId"=puppies.id
             WHERE "userId"=$1;
-        `, [id])
+        `, [userId])
 
         return rows;
     } catch (error) {
@@ -85,6 +85,20 @@ async function deleteCartItem(id) {
     }
 }
 
+async function deleteCartItemsByPuppy(puppyId) {
+    try{
+        const { rows: [ cart_item ] } =   await client.query(`
+            DELETE FROM cart_items
+            WHERE "puppyId"=$1
+            RETURNING *;
+    `, [puppyId])
+
+        return cart_item;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function deleteCart(userId) {
     try{
         const { rows } =   await client.query(`
@@ -105,5 +119,6 @@ module.exports = {
     getCartByUser,
     // updateCartItems,
     deleteCartItem,
-    deleteCart
+    deleteCart,
+    deleteCartItemsByPuppy
   };

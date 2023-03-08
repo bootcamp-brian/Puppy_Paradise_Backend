@@ -12,7 +12,7 @@ cartRouter.get('/', checkAuthorization, async (req, res, next) => {
         const cartItems = await getCartByUser(userId);
         let subtotal = 0;
         for (let item of cartItems) {
-            subtotal += item.price;
+            subtotal += Number(item.price);
         }
         const cart = {
             cartItems,
@@ -33,7 +33,7 @@ cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next)
         const { puppyId } = req.params;
         const puppy = await getPuppyById(puppyId);
 
-        if (puppy.id) {
+        if (puppy.isAvailable) {
             const cartItem = await addItemToCart({ userId, puppyId });
     
             res.send(cartItem);
@@ -41,8 +41,8 @@ cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next)
             res.status(404);
             next({
                 error: '404',
-                name: 'PuppyNotFoundError',
-                message: 'Puppy not found'
+                name: 'PuppyNotAvailableError',
+                message: 'Puppy not available'
             })
         }
     } catch ({ error, name, message }) {

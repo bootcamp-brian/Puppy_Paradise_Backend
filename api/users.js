@@ -2,7 +2,7 @@ const express = require("express");
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_SECRET_ADMIN } = process.env;
-const { createUser, getUser, updateUser, getUserByEmail, getUserById, getResetUserById, deleteResetUser, getAdminById } = require('../db');
+const { createUser, getUser, updateUser, getUserByEmail, getUserById, getResetUserById, deleteResetUser, getAdminById, getInactiveUserById } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // POST /api/users/register
@@ -73,9 +73,18 @@ usersRouter.post('/login', async (req, res, next) => {
 
     try {
         const user = await getUser({ email, password });
-        const resetUser = getResetUserById(user.id);
+        const resetUser = await getResetUserById(user.id);
+        const inactiveUser = await getInactiveUserById(user.id);
 
-        if (!resetUser) {
+        if (inactiveUser) {
+            res.send({
+                message: "Your account has been deactivated",
+                userId: user.id,
+                status: "inactive"
+            });
+        }
+
+        if (resetUser) {
             res.send({
                 message: "Please reset your password",
                 userId: user.id,
@@ -123,14 +132,14 @@ usersRouter.delete('/password_reset/:userId', async (req, res, next) => {
         const { password } = req.body;
         const { userId } = req.params;
 
-        const user = deleteResetUser(userId, password);
+        const user = await deleteResetUser(userId, password);
 
-        if (!user.id) {
-            res.status(404);
+        if (!user) {
+            res.status(400);
             next({
-                error: '404',
-                name: 'UserNotFoundError',
-                message: 'User not found'
+                error: '400',
+                name: 'SamePasswordError',
+                message: 'New password must be different'
             });
         } else {
             res.send(user);
@@ -169,7 +178,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
         } else if (req.body.email) {
             const userByEmail = await getUserByEmail(req.body.email);
 
-            if (userByEmail.id && userByEmail.id !== userId) {
+            if (userByEmail && userByEmail.id !== userId) {
                 res.status(400);
                 next({
                     error: '400',
@@ -177,7 +186,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
                     message: 'That email is already in use'
                 })
             } else {
-                const updatedUser = await updateUser({ userId, ...fields });
+                const updatedUser = await updateUser({ id: userId, ...fields });
     
                 if (!updatedUser) {
                     next({
@@ -190,7 +199,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
                 }
             }
         } else {
-            const updatedUser = await updateUser({ userId, ...fields });
+            const updatedUser = await updateUser({ id: userId, ...fields });
 
             if (!updatedUser) {
                 res.status(400);
