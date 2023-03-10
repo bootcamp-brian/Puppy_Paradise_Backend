@@ -24,7 +24,6 @@ async function createUser({
 
     delete user.password;
 
-    console.log(user)
     addShippingAddress({ userId: user.id, ...shippingAddress});
     addBillingAddress({ userId: user.id, ...billingAddress});
     const userWithData = await attachUserData(user);
