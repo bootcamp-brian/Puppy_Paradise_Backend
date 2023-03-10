@@ -73,6 +73,16 @@ usersRouter.post('/login', async (req, res, next) => {
 
     try {
         const user = await getUser({ email, password });
+        
+        if (!user) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'IncorrectCredentialsError',
+                message: 'Incorrect email or password'
+            });
+        }
+        
         const resetUser = await getResetUserById(user.id);
         const inactiveUser = await getInactiveUserById(user.id);
 
@@ -92,14 +102,6 @@ usersRouter.post('/login', async (req, res, next) => {
             });
         }
 
-        if (!user) {
-            res.status(400);
-            next({
-                error: '400',
-                name: 'IncorrectCredentialsError',
-                message: 'Incorrect email or password'
-            });
-        }
 
         const token = jwt.sign({ id: user.id, email }, JWT_SECRET);
         const admin = await getAdminById(user.id);
