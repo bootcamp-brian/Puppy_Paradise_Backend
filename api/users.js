@@ -144,11 +144,11 @@ usersRouter.delete('/password_reset/:userId', async (req, res, next) => {
                 message: 'New password must be different'
             });
         } else {
-            const token = jwt.sign({ id: user.id, email }, JWT_SECRET);
+            const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
             const admin = await getAdminById(user.id);
 
             if(admin) {
-                const adminToken = jwt.sign({ id: user.id, email }, JWT_SECRET_ADMIN);
+                const adminToken = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET_ADMIN);
                 res.send({
                     message: "you're logged in!",
                     token,
