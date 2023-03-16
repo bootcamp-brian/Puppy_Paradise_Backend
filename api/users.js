@@ -183,7 +183,10 @@ usersRouter.get('/me', checkAuthorization, async (req, res, next) => {
 usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
-        const { ...fields } = req.body;
+        const userInfo = { ...req.body };
+
+        delete userInfo.shippingAddress;
+        delete userInfo.billingAddress;
 
         const user = await getUserById(userId);
 
@@ -211,7 +214,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
                 if (req.body.billingAddress) {
                     await updateBillingAddress(userId, req.body.billingAddress);
                 }
-                const updatedUser = await updateUser({ id: userId, ...fields });
+                const updatedUser = await updateUser({ id: userId, ...userInfo });
     
                 if (!updatedUser) {
                     next({
@@ -230,7 +233,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
             if (req.body.billingAddress) {
                 await updateBillingAddress(userId, req.body.billingAddress);
             }
-            const updatedUser = await updateUser({ id: userId, ...fields });
+            const updatedUser = await updateUser({ id: userId, ...userInfo });
 
             if (!updatedUser) {
                 res.status(400);
