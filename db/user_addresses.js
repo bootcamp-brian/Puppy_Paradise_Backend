@@ -42,7 +42,56 @@ async function addBillingAddress({
     }
 }
 
+async function updateShippingAddress (userId, shippingAddress) {
+    try{
+        const setString = Object.keys(shippingAddress).map(
+            (key, index) => `"${ key }"=$${ index + 1 }`
+        ).join(', ');
+    
+        if (setString.length === 0) {
+            return;
+        }
+    
+        const { rows: [ shippingAddress ] } = await client.query(`
+            UPDATE shipping_addresses
+            SET ${ setString }
+            WHERE "userId"=${ userId }
+            RETURNING *;
+        `, Object.values(shippingAddress));
+    
+        return shippingAddress;
+      } catch (error) {
+        console.error(error)
+    }
+
+}
+
+async function updateBillingAddress (userId, billingAddress) {
+    try{
+        const setString = Object.keys(billingAddress).map(
+            (key, index) => `"${ key }"=$${ index + 1 }`
+        ).join(', ');
+    
+        if (setString.length === 0) {
+            return;
+        }
+    
+        const { rows: [ billingAddress ] } = await client.query(`
+            UPDATE billing_addresses
+            SET ${ setString }
+            WHERE "userId"=${ userId }
+            RETURNING *;
+        `, Object.values(billingAddress));
+    
+        return billingAddress;
+      } catch (error) {
+        console.error(error)
+    }
+
+}
 module.exports = {
     addShippingAddress,
-    addBillingAddress
+    addBillingAddress,
+    updateBillingAddress,
+    updateShippingAddress
 };

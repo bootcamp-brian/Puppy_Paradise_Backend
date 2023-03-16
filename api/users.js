@@ -2,7 +2,7 @@ const express = require("express");
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_SECRET_ADMIN } = process.env;
-const { createUser, getUser, updateUser, getUserByEmail, getUserById, getResetUserById, deleteResetUser, getAdminById, getInactiveUserById } = require('../db');
+const { createUser, getUser, updateUser, getUserByEmail, getUserById, getResetUserById, deleteResetUser, getAdminById, getInactiveUserById, updateShippingAddress, updateBillingAddress } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // POST /api/users/register
@@ -205,6 +205,12 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
                     message: 'That email is already in use'
                 })
             } else {
+                if (req.body.shippingAddress) {
+                    await updateShippingAddress(userId, req.body.shippingAddress);
+                }
+                if (req.body.billingAddress) {
+                    await updateBillingAddress(userId, req.body.billingAddress);
+                }
                 const updatedUser = await updateUser({ id: userId, ...fields });
     
                 if (!updatedUser) {
@@ -218,6 +224,12 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
                 }
             }
         } else {
+            if (req.body.shippingAddress) {
+                await updateShippingAddress(userId, req.body.shippingAddress);
+            }
+            if (req.body.billingAddress) {
+                await updateBillingAddress(userId, req.body.billingAddress);
+            }
             const updatedUser = await updateUser({ id: userId, ...fields });
 
             if (!updatedUser) {

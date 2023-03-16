@@ -138,7 +138,7 @@ async function createTables() {
         await client.query(`
             CREATE TABLE categories (
                 id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL
+                name VARCHAR(255) UNIQUE NOT NULL
             );
         `);
         await client.query(`

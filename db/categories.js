@@ -5,6 +5,7 @@ async function createCategory(name) {
         const { rows: [category] } = await client.query(`
             INSERT INTO categories(name)
             VALUES ($1)
+            ON CONFLICT (name) DO NOTHING
             RETURNING *;
         `, [name])
 
