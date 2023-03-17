@@ -5,7 +5,8 @@ const {
     createAdmin,
     createOrder,
     addItemToCart,
-    createCategory
+    createCategory,
+    addPuppyToCategory
 } = require('./');
 const client = require("./client");
 const { getAllUsers, getUserByEmail } = require('./users');
@@ -1000,7 +1001,7 @@ async function createInitialCategories() {
             }
         }
         
-        console.log("Categories created: ", categories)
+        // console.log("Categories created: ", categories)
         console.log("Finished creating categories!")
     } catch (error) {
         console.error("Error creating categories!")
