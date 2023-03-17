@@ -967,6 +967,7 @@ async function createInitialCategories() {
         await createCategory("Spayed");
         await createCategory("Neutered");
         await createCategory("Vaccinated");
+        await createCategory("Pedigreed");
         
         const map = {
             "S": 1,
@@ -977,7 +978,8 @@ async function createInitialCategories() {
             "Female": 6,
             "Spayed": 7,
             "Neutered": 8,
-            "Vaccinated": 9
+            "Vaccinated": 9,
+            "Pedigreed": 10
         }
         
         const puppies = await getAllPuppies();
@@ -999,6 +1001,9 @@ async function createInitialCategories() {
             }
             if (puppy.isVaccinated) {
                 await addPuppyToCategory({ categoryId: 9, puppyId: puppy.id});
+            }
+            if (puppy.pedigree) {
+                await addPuppyToCategory({ categoryId: 10, puppyId: puppy.id});
             }
         }
         
