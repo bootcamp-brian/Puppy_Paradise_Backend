@@ -984,20 +984,21 @@ async function createInitialCategories() {
 
         for (let puppy of puppies) {
             if (map[puppy.size]) {
-                addPuppyToCategory({ categoryId: map[puppy.size], puppyId: puppy.id});
+                await addPuppyToCategory({ categoryId: map[puppy.size], puppyId: puppy.id});
+                
             }
             if (map[puppy.gender]) {
-                addPuppyToCategory({ categoryId: map[puppy.gender], puppyId: puppy.id});
+                await addPuppyToCategory({ categoryId: map[puppy.gender], puppyId: puppy.id});
             }
             if (puppy.isAltered) {
                 if (puppy.gender === "Female") {
-                    addPuppyToCategory({ categoryId: 7, puppyId: puppy.id});
+                    await addPuppyToCategory({ categoryId: 7, puppyId: puppy.id});
                 } else {
-                    addPuppyToCategory({ categoryId: 8, puppyId: puppy.id});
+                    await addPuppyToCategory({ categoryId: 8, puppyId: puppy.id});
                 }
             }
             if (puppy.isVaccinated) {
-                addPuppyToCategory({ categoryId: 9, puppyId: puppy.id});
+                await addPuppyToCategory({ categoryId: 9, puppyId: puppy.id});
             }
         }
         
