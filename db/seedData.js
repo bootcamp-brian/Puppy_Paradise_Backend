@@ -178,7 +178,7 @@ async function createInitialUsers() {
             }
         }
         const createdGuest = await createUser(guest);
-        
+
         const usersToCreate = [
             { 
                 "firstName": "demi",
@@ -945,19 +945,12 @@ async function createInitialCategories() {
     console.log("Starting to create categories...")
     try {
         const categoriesToCreate = [
-            {
-                "name": "Size"
-            }, {
-                "name": "Breed"
-            }, {
-                "name": "Pedigree"
-            }, {
-                "name": "Vaccinated"
-            }, {
-                "name": "Neutered"
-            }, {
-                "name": "Gender"
-            }
+            "Size",
+            "Breed",
+            "Pedigree",
+            "Vaccinated", 
+            "Neutered",
+            "Gender"
         ]
         const categories = await Promise.all(categoriesToCreate.map(createCategory))
     
