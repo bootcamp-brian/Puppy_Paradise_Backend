@@ -1,7 +1,7 @@
 const express = require("express");
 const { de } = require("faker/lib/locales");
 const ordersRouter = express.Router();
-const { getOrderById, getOrdersByUser, createOrder, addPuppyToOrder, getCartByUser, deleteCart, getUserByEmail, deleteCartItemsByPuppy } = require('../db');
+const { getOrderById, getOrdersByUser, createOrder, addPuppyToOrder, getCartByUser, deleteCart, getUserByEmail, deleteCartItemsByPuppy, deletePuppy } = require('../db');
 const { checkAuthorization } = require("./utils");
 
 // GET /api/orders/:orderId
@@ -47,6 +47,61 @@ ordersRouter.get('/', checkAuthorization, async (req, res, next) => {
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 
+})
+
+// POST /api/orders/guest
+// Creates a new order for guest, and clears their cart
+ordersRouter.post('/guest', async (req, res, next) => {
+    try {
+        const { orderItems, date } = req.body;
+
+        if (!orderItems[0]) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'EmptyCartError',
+                message: 'Your cart is empty'
+            })
+        }
+
+        let total = 0;
+        for (let item of orderItems) {
+            if (!item.isAvailable) {
+                res.status(400)
+                next({
+                    error:'400',
+                    name: "PuppyUnavailableError",
+                    message: `${item.name} is no longer available`,
+                    puppyId: item.puppyId
+                })
+            }
+            total += Number(item.price);
+        }
+
+        const status = "Created";
+
+        const submittedOrder = await createOrder({ userId: 1, date, status, total });
+
+        if (!submittedOrder.id) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'OrderCreationError',
+                message: 'Unable to create order'
+            })
+        }
+
+        for (let item of orderItems) {
+            await addPuppyToOrder({ orderId: submittedOrder.id, puppyId: item.id });
+            await deletePuppy(item.id);
+        }
+
+        const completedOrder = await getOrderById(submittedOrder.id);
+
+        res.send(completedOrder);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    }
 })
 
 // POST /api/orders
@@ -96,6 +151,7 @@ ordersRouter.post('/', checkAuthorization, async (req, res, next) => {
 
         for (let item of orderItems) {
             await addPuppyToOrder({ orderId: submittedOrder.id, puppyId: item.puppyId });
+            await deletePuppy(item.puppyId)
         }
 
         deleteCart(userId);
