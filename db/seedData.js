@@ -158,26 +158,29 @@ async function createTables() {
 async function createInitialUsers() {
     console.log("Starting to create users...")
     try {
+        const guest = { 
+            "firstName": "guest",
+            "lastName": "guest",
+            "email": "guest",
+            "password": "guest",
+            "phone": "guest",
+            "shippingAddress": {
+                "address": "guest",
+                "city": "guest",
+                "state": "guest",
+                "zip": 0
+            },
+            "billingAddress": {
+                "address": "guest",
+                "city": "guest",
+                "state": "guest",
+                "zip": 0
+            }
+        }
+        const createdGuest = await createUser(guest);
+        
         const usersToCreate = [
             { 
-                "firstName": "guest",
-                "lastName": "guest",
-                "email": "guest",
-                "password": "guest",
-                "phone": "guest",
-                "shippingAddress": {
-                    "address": "guest",
-                    "city": "guest",
-                    "state": "guest",
-                    "zip": 0
-                },
-                "billingAddress": {
-                    "address": "guest",
-                    "city": "guest",
-                    "state": "guest",
-                    "zip": 0
-                }
-            },{ 
                 "firstName": "demi",
                 "lastName": "zayas",
                 "email": "dzayas@live.com",
