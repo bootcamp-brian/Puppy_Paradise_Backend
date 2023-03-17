@@ -1,12 +1,11 @@
 const { 
     createUser,
     createPuppy,
-    addShippingAddress,
-    addBillingAddress,
     getAllPuppies,
     createAdmin,
     createOrder,
     addItemToCart,
+    createCategory
 } = require('./');
 const client = require("./client");
 const { getAllUsers, getUserByEmail } = require('./users');
@@ -161,6 +160,24 @@ async function createInitialUsers() {
     try {
         const usersToCreate = [
             { 
+                "firstName": "guest",
+                "lastName": "guest",
+                "email": "guest",
+                "password": "guest",
+                "phone": "guest",
+                "shippingAddress": {
+                    "address": "guest",
+                    "city": "guest",
+                    "state": "guest",
+                    "zip": 0
+                },
+                "billingAddress": {
+                    "address": "guest",
+                    "city": "guest",
+                    "state": "guest",
+                    "zip": 0
+                }
+            },{ 
                 "firstName": "demi",
                 "lastName": "zayas",
                 "email": "dzayas@live.com",
@@ -442,75 +459,6 @@ async function createInitialUsers() {
     }
 }
 
-// async function createInitialBillingAddresses() {
-//     console.log("Starting to create billing addresses...")
-//     try {
-//         const users = await getAllUsers()
-//         const billingAddressesToCreate = [
-//                 {
-//                 "address": "1287 Logan Drive",
-//                 "city": "Chattanooga",
-//                 "state": "TN",
-//                 "zip": 61556
-//               }, {
-//                 "userId": users[1].id,
-//                 "address": "468 Randall Lane",
-//                 "city": "Bellevue",
-//                 "state": "WA",
-//                 "zip": 57479
-//               }, {
-//                 "userId": users[2].id,
-//                 "address": "2828 Calypso Road",
-//                 "city": "Schenectady",
-//                 "state": "NY",
-//                 "zip": 47596
-//               }
-//         ]
-//         const billingAddresses = await Promise.all(billingAddressesToCreate.map(addBillingAddress))
-    
-//         console.log("Billing addresses created: ", billingAddresses)
-//         console.log("Finished creating billing addresses!")
-//     } catch (error) {
-//         console.error("Error creating billing addresses!")
-//         throw error
-//     }
-// }
-
-// async function createInitialShippingAddresses() {
-//     console.log("Starting to create shipping addresses...")
-//     try {
-//         const [demi, brian, andreea] = await getAllUsers()
-//         const shippingAddressesToCreate = [
-//             {
-//                 "userId": users[0].id,
-//                 "address": "PO Box 1287",
-//                 "city": "Long Beach",
-//                 "state": "CA",
-//                 "zip": 90803
-//               }, {
-//                 "userId": users[1].id,
-//                 "address": "5761 Elka Avenue",
-//                 "city": "Bellevue",
-//                 "state": "WA",
-//                 "zip": 57479
-//               }, {
-//                 "userId": users[2].id,
-//                 "address": "2828 Calypso Road",
-//                 "city": "Schenectady",
-//                 "state": "NY",
-//                 "zip": 47596
-//               }
-//         ]
-//         const shippingAddresses = await Promise.all(shippingAddressesToCreate.map(addShippingAddress))
-    
-//         console.log("Shipping addresses created: ", shippingAddresses)
-//         console.log("Finished creating shipping addresses!")
-//     } catch (error) {
-//         console.error("Error creating shipping addresses!")
-//         throw error
-//     }
-// }
-
 async function createInitialAdmins() {
     console.log("Starting to create admins...")
     try {
@@ -525,7 +473,7 @@ async function createInitialAdmins() {
         ]
         const admins = await Promise.all(adminsToCreate.map(createAdmin))
     
-        console.log("admins created: ", admins)
+        console.log("Admins created: ", admins)
         console.log("Finished creating admins!")
     } catch (error) {
         console.error("Error creating admins!")
@@ -574,11 +522,11 @@ async function createInitialPuppies() {
         const puppiesToCreate = [
             {
                 "name": "Jack",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59405844/1/?bust=1673387710&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59405844/2/?bust=1673387711&width=1080",
+                "image1": "https://images.dog.ceo/breeds/labrador/n02099712_6455.jpg",
+                "image2": "https://images.dog.ceo/breeds/labrador/n02099712_209.jpg",
                 "description": "Quintissential social butterfly! Always happy to see you and gets along well with humans and animals alike.",
                 "breed": "Labrador",
-                "age": 2,
+                "age": 24,
                 "weight": 82,
                 "size": "L",
                 "pedigree": true,
@@ -589,10 +537,11 @@ async function createInitialPuppies() {
                 "price": 800.99
             },{
                 "name": "Bella",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59938051/2/?bust=1677693053&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59938051/1/?bust=1677693052&width=1080",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_10131.jpg",
+                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_11696.jpg",
+
                 "description": "Quintissential anti-social butterfly! Dreams of laying in the sun all day and loves hiding under blankets.",
-                "age": 16,
+                "age": 192,
                 "breed": "Chihuahua mix",
                 "weight": 12,
                 "size": "S",
@@ -604,10 +553,10 @@ async function createInitialPuppies() {
                 "price": 800.99
             },{
                 "name": "Ivy",
-                "image1": "https://adopets-prod.s3.amazonaws.com/organization/pet/picture/20221030_222412_1669847052729.JPEG?width=600",
+                "image1": "https://images.dog.ceo/breeds/pitbull/pitbull_dog.jpg",
                 "image2": null,
                 "description": "We'd like to introduce you to sweet Ivy! She's low to mid energy, affectionate, loves to be pet and is treat motivated. She's ready for some relaxation and lots of TLC. If you're looking for the perfect companion for short walks, movie night on the couch & the best Ivy ever without needing a green thumb, we've got the gal for you!",
-                "age": 8,
+                "age": 96,
                 "breed": "Pit Bull Terrier",
                 "weight": 75,
                 "size": "L",
@@ -619,10 +568,10 @@ async function createInitialPuppies() {
                 "price": 445.99
             }, {
                 "name": "Benedict",
-                "image1": "http://dummyimage.com/147x100.png/https://adopets-prod.s3.amazonaws.com/organization/pet/picture/2023018_222555_1674080755408.JPEG?width=600/ffffff",
-                "image2": null,
+                "image1": "https://images.dog.ceo/breeds/pitbull/IMG_20190826_121528_876.jpg",
+                "image2": "https://images.dog.ceo/breeds/pitbull/20190710_143021.jpg",
                 "description": "This adora-bull young lad is 5 year old Benedict Cumbermutt. He's a bull terrier mix, already neutered & 75 pounds. Benedict is deaf & will need an experienced owner or someone willing to research how best to communicate with him & keep him safe. He's active, playful & loves affection. ",
-                "age": 5,
+                "age": 60,
                 "breed": " Pit Bull Terrier",
                 "weight": 75,
                 "size": "L",
@@ -634,10 +583,10 @@ async function createInitialPuppies() {
                 "price": 295.99
             }, {
                 "name": "Fluffy",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59944536/5/?bust=1676348193&width=560",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59944536/4/?bust=1676348192&width=560",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_952.jpg",
+                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_13964.jpg",
                 "description": "Fluffy is a loyal, affectionate lady who is a little over a year old and weighs 12 pounds. She loves being held and cuddled, and she gives the best kisses! She gets along well with other small, calm dogs.",
-                "age": 1,
+                "age": 14,
                 "breed": "Chihuahua Mix",
                 "weight": 12,
                 "size": "S",
@@ -648,10 +597,10 @@ async function createInitialPuppies() {
                 "price": 480.99
             }, {
                 "name": "Kylo",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60151109/1/?bust=1677387886&width=560",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60151109/2/?bust=1677387887&width=560",
+                "image1": "https://images.dog.ceo/breeds/labrador/n02099712_4550.jpg",
+                "image2": "https://images.dog.ceo/breeds/labrador/n02099712_3364.jpg",
                 "description": "Kylo is active and playful, and he loves to go on walks. He is a cuddler inside the home and hugs everyone he meets. He constantly wags his tail! Kylo is friendly toward other dogs and enjoys running around with them in the yard. He does not have a single mean bone in his body",
-                "age": 1,
+                "age": 12,
                 "breed": "Labrador",
                 "weight": 91,
                 "size": "XL",
@@ -663,10 +612,10 @@ async function createInitialPuppies() {
                 "price": 375.99
             }, {
                 "name": "Nova",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58674444/1/?bust=1666857003&width=560",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58674444/2/?bust=1666857004&width=560",
-                "description": "Nova is a 2-year-old, beautiful brindle Shepherd-mix girl with a sweet, loving temperament. She loves every dog she meets and will roll on her side and back for belly rubs. She is playful and smart, and she gives everyone kisses!",
-                "age": 2,
+                "image1": "https://images.dog.ceo/breeds/germanshepherd/n02106662_5169.jpg",
+                "image2": "https://images.dog.ceo/breeds/germanshepherd/n02106662_22730.jpg",
+                "description": "Nova is a 2-year-old, beautiful Shepherd-mix girl with a sweet, loving temperament. She loves every dog she meets and will roll on her side and back for belly rubs. She is playful and smart, and she gives everyone kisses!",
+                "age": 24,
                 "breed": "Shepherd",
                 "weight": 49,
                 "size": "M",
@@ -678,10 +627,10 @@ async function createInitialPuppies() {
                 "price": 990.99
             }, {
                 "name": "Jinny",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53485343/1/?bust=1636195509&width=560",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53485343/4/?bust=1636195513&width=560",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/marto.jpg",
+                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_8578.jpg",
                 "description": "Jinny is a sweet and sassy senior Chihuahua. She is approximately 10 years old and weighs nine pounds.",
-                "age": 10,
+                "age": 120,
                 "breed": "Chihuahua Mix",
                 "weight": 9,
                 "size": "S",
@@ -693,10 +642,10 @@ async function createInitialPuppies() {
                 "price": 250.99
             }, {
                 "name": "Remi",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59524983/4/?bust=1674357559&width=560",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59524983/3/?bust=1674357558&width=560",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_3942.jpg",
+                "image2": null,
                 "description": "Remi is a 17 pound, 3 year old, grumpy old man 75% of the time. He has come such a long way from the kill list at the shelter with no hair, to the happy dog friendly boy he is now. He loves dogs, walks, and humans (on his own time).",
-                "age": 3,
+                "age": 36,
                 "breed": "Chihuahua",
                 "weight": 17,
                 "size": "S",
@@ -708,10 +657,10 @@ async function createInitialPuppies() {
                 "price": 325.99
             }, {
                 "name": "Ozzie",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59312072/1/?bust=1672522867&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59312072/2/?bust=1672522868&width=1080",
-                "description": "Meet Ozzie. Ozzie is a handsome two-year-old Doberman/Lab mix who is in need of a new home. He has dazzling amber eyes, and a beautiful chestnut coat. He’s a tall and sturdy boy standing at about 28” at the shoulder. He weighs approximately 80 pounds. Ozzie is a big sweet baby with people he knows, and he gets along with other well-matched dogs. Ozzie is a goofy, funny, playful dog, who would do anything for his people. ",
-                "age": 2,
+                "image1": "https://images.dog.ceo/breeds/labrador/n02099712_7605.jpg",
+                "image2": "https://images.dog.ceo/breeds/labrador/n02099712_8242.jpg",
+                "description": "Meet Ozzie. Ozzie is a handsome two-year-old Doberman/Lab mix who is in need of a new home. He has dazzling eyes, and a beautiful black coat. He is a tall and sturdy boy standing at about 28” at the shoulder. He weighs approximately 80 pounds. Ozzie is a big sweet baby with people he knows, and he gets along with other well-matched dogs. Ozzie is a goofy, funny, playful dog, who would do anything for his people. ",
+                "age": 24,
                 "breed": "Labrador Mix",
                 "weight": 80,
                 "size": "L",
@@ -723,10 +672,10 @@ async function createInitialPuppies() {
                 "price": 388.99
             }, {
                 "name": "Loretta",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58883608/6/?bust=1677293290&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58883608/1/?bust=1668668553&width=1080",
+                "image1": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_13858.jpg",
+                "image2": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_3762.jpg",
                 "description": "Meet Loretta. She is the type of well-balanced dog that spoils pet owners. Loretta is energetic without being rambunctious, an extrovert who also loves her “me time,” and is food motivated in a way that does not lead to her hunting around for other treats.",
-                "age": 7,
+                "age": 84,
                 "breed": "Pit Bull Terrier",
                 "weight": 74,
                 "size": "L",
@@ -738,10 +687,10 @@ async function createInitialPuppies() {
                 "price": 360.99
             }, {
                 "name": "Carlisle",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60006416/1/?bust=1677723327&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60006416/2/?bust=1677723327&width=1080",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_2479.jpg",
+                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_1862.jpg",
                 "description": "Carlisle is a darling boy. He is gently and sweet with not a mean bone in his body. He is good with people, dogs and cats.",
-                "age": 5,
+                "age": 60,
                 "breed": "Chihuahua",
                 "weight": 15,
                 "size": "S",
@@ -753,10 +702,10 @@ async function createInitialPuppies() {
                 "price": 280.99
             }, {
                 "name": "Floofy",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60323924/1/?bust=1677782996&width=1080",
+                "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_476.jpg",
                 "image2": null,
                 "description": "Floofy is happy, sweet, and loyal.  He is fully vetted, superfriendly, and loves other dogs",
-                "age": 10,
+                "age": 120,
                 "breed": "Border Collie Mix",
                 "weight": 45,
                 "size": "M",
@@ -768,10 +717,10 @@ async function createInitialPuppies() {
                 "price": 415.99
             }, {
                 "name": "Rainbow",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53674463/1/?bust=1637872138&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/53674463/3/?bust=1637872140&width=1080",
+                "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_1133.jpg",
+                "image2": "https://images.dog.ceo/breeds/collie-border/n02106166_331.jpg",
                 "description": "Meet Rainbow! Rainbow is the sweetest little short stack! He's approximately 15-years old and 30-lbs, and being low to the ground makes it easy for him to flop over for belly rubs. He loves going on walks, car rides, and just spending his day with you. He's the ultimate little buddy!",
-                "age": 15,
+                "age": 180,
                 "breed": "Border Collie Mix",
                 "weight": 30,
                 "size": "M",
@@ -783,10 +732,10 @@ async function createInitialPuppies() {
                 "price": 210.99
             }, {
                 "name": "Abby",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58579859/2/?bust=1666119640&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58579859/1/?bust=1666119637&width=1080",
+                "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_2685.jpg",
+                "image2": null,
                 "description": "Meet Abby a young border collie mix about 1 year old. She's a friendly outgoing and active dog, loves her k9 buddies and her new walking friends. She is a busy, active and smart dog.",
-                "age": 1,
+                "age": 12,
                 "breed": "Border Collie Mix",
                 "weight": 55,
                 "size": "M",
@@ -798,10 +747,10 @@ async function createInitialPuppies() {
                 "price": 475.99
             }, {
                 "name": "Raven",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52121837/1/?bust=1670283487&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52121837/5/?bust=1670283490&width=1080",
+                "image1": "https://images.dog.ceo/breeds/labrador/n02099712_4323.jpg",
+                "image2": "https://images.dog.ceo/breeds/labrador/n02099712_6997.jpg",
                 "description": "She is a friendly girl, good with people and medium to large size dogs. She has no training and probably has not been in a house much, but she's a smart dog and can learn anything she needs to know. She is very attached to her siblings and would enjoy a home with another young dog or two.",
-                "age": 1,
+                "age": 12,
                 "breed": "Labrador",
                 "weight": 50,
                 "size": "M",
@@ -813,10 +762,10 @@ async function createInitialPuppies() {
                 "price": 460.99
             }, {
                 "name": "Mookie Petts",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56555085/1/?bust=1677360430&width=1080",
+                "image1": "https://images.dog.ceo/breeds/husky/n02110185_10273.jpg",
                 "image2": null,
                 "description": "Mookie Petts is the whole package: tall, incredibly handsome, confident, funny, athletic, smart. This 4 year old has stunning blue eyes, an awesome bushy tail, knows some basic obediance, loves to play and would be your perfect walking/ running/ hiking/ adventure buddy.",
-                "age": 4,
+                "age": 48,
                 "breed": "Husky",
                 "weight": 65,
                 "size": "L",
@@ -828,10 +777,10 @@ async function createInitialPuppies() {
                 "price": 580.99
             }, {
                 "name": "Amaya",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/55191980/3/?bust=1648939358&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/55191980/4/?bust=1648939358&width=1080",
+                "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_1637.jpg",
+                "image2": "https://images.dog.ceo/breeds/collie-border/n02106166_1244.jpg",
                 "description": "Amaya is incredibly shy when she first meets people, but once she knows you, she LOVES to give kisses, sit for treats and catch food flying through the air.",
-                "age": 4,
+                "age": 48,
                 "breed": "Border Collie Mix",
                 "weight": 48,
                 "size": "M",
@@ -843,10 +792,10 @@ async function createInitialPuppies() {
                 "price": 372.99
             }, {
                 "name": "Rayne",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60074426/1/?bust=1677348309&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60074426/3/?bust=1677365654&width=1080",
+                "image1": "https://images.dog.ceo/breeds/husky/n02110185_5716.jpg",
+                "image2": "https://images.dog.ceo/breeds/husky/n02110185_13434.jpg",
                 "description": "Rayne is an awesome companion and will work best in a home with other dogs.  He is super loyal and very talkative.",
-                "age": 2,
+                "age": 24,
                 "breed": "Husky",
                 "weight": 50,
                 "size": "M",
@@ -858,10 +807,10 @@ async function createInitialPuppies() {
                 "price": 320.99
             }, {
                 "name": "Jasper",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58651111/1/?bust=1677348141&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58651111/3/?bust=1677791424&width=1080",
+                "image1": "https://images.dog.ceo/breeds/husky/n02110185_6780.jpg",
+                "image2": null,
                 "description": "This stunning, blue eyed pup is Jasper. Jasper is very high energy and loves to play with water. This pup would be best suited in an active home where he'd be your one and only companion.",
-                "age": 3,
+                "age": 36,
                 "breed": "Husky",
                 "weight": 72,
                 "size": "L",
@@ -873,10 +822,10 @@ async function createInitialPuppies() {
                 "price": 395.99
             }, {
                 "name": "Rhonda",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58608575/2/?bust=1677802221&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58608575/4/?bust=1677802233&width=1080",
+                "image1": "https://images.dog.ceo/breeds/husky/n02110185_10116.jpg",
+                "image2": "https://images.dog.ceo/breeds/husky/n02110185_10844.jpg",
                 "description": "Meet radiant Rhonda! With her bright blue eyes she's sure to steal your heart. She is described by staff as a cuddle bug and loves to socialize with all her human companions. She is eager to train, and would love to continue with you at home!",
-                "age": 1,
+                "age": 12,
                 "breed": "Husky",
                 "weight": 45,
                 "size": "M",
@@ -888,10 +837,10 @@ async function createInitialPuppies() {
                 "price": 415.99
             }, {
                 "name": "Glenn",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/57474417/1/?bust=1677348427&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/57474417/4/?bust=1677694244&width=1080",
+                "image1": "https://images.dog.ceo/breeds/husky/n02110185_10849.jpg",
+                "image2": "https://images.dog.ceo/breeds/husky/n02110185_1446.jpg",
                 "description": "This blue-eyed boy is Glenn and he's ready to become a part of your family! Glenn is a 4 year-old Husky who would love nothing more than to play with his toys and be in the company of his human companions. He enjoys taking in all the smells while basking in the sun.",
-                "age": 4,
+                "age": 48,
                 "breed": "Husky",
                 "weight": 68,
                 "size": "L",
@@ -903,10 +852,10 @@ async function createInitialPuppies() {
                 "price": 430.99
             }, {
                 "name": "Kit Kat",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59717197/6/?bust=1674705636&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59717197/4/?bust=1677529569&width=1080",
+                "image1": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_4263.jpg",
+                "image2": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_13419.jpg",
                 "description": "Kit Kat is a GREAT dog! She loves to be around people and is eager to please. She loves to play ball, although she is still trying to understand the fetch game! She is spayed and current on vaccinations",
-                "age": 3,
+                "age": 36,
                 "breed": "Pit Bull Terrier",
                 "weight": 47,
                 "size": "M",
@@ -918,10 +867,10 @@ async function createInitialPuppies() {
                 "price": 560.99
             }, {
                 "name": "Hachi",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59891377/2/?bust=1675918305&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59891377/3/?bust=1675918307&width=1080",
-                "description": "Meet Hachi, he's a 4 year old Yellow Lab.He can be excitable, but loves to lay by your feet and relax. He is house trained and good with people and other dogs.",
-                "age": 4,
+                "image1": "https://images.dog.ceo/breeds/labrador/n02099712_2223.jpg",
+                "image2": null,
+                "description": "Meet Hachi, he's a 2 year old Chestnut Lab.He can be excitable, but loves to lay by your feet and relax. He is house trained and good with people and other dogs.",
+                "age": 24,
                 "breed": "Labrador",
                 "weight": 75,
                 "size": "L",
@@ -933,10 +882,10 @@ async function createInitialPuppies() {
                 "price": 520.99
             }, {
                 "name": "Elvie",
-                "image1": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59910010/1/?bust=1677562505&width=1080",
-                "image2": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59910010/4/?bust=1676094177&width=1080",
+                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_3681.jpg",
+                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_2188.jpg",
                 "description": "Elvie is a female chihuahua mix. She is a tiny little girl at just under 8 lbs. Elvie is very sweet and loves to snuggle. She likes other dogs and playing with toys.",
-                "age": 1,
+                "age": 10,
                 "breed": "Chihuahua Mix",
                 "weight": 8,
                 "size": "S",
@@ -950,7 +899,7 @@ async function createInitialPuppies() {
         ]
         const puppies = await Promise.all(puppiesToCreate.map(createPuppy))
     
-        console.log("puppies created: ", puppies)
+        console.log("Puppies created: ", puppies)
         console.log("Finished creating puppies!")
     } catch (error) {
         console.error("Error creating puppies!")
@@ -989,17 +938,44 @@ async function createInitialCarts() {
     }
 }
 
+async function createInitialCategories() {
+    console.log("Starting to create categories...")
+    try {
+        const categoriesToCreate = [
+            {
+                "name": "Size"
+            }, {
+                "name": "Breed"
+            }, {
+                "name": "Pedigree"
+            }, {
+                "name": "Vaccinated"
+            }, {
+                "name": "Neutered"
+            }, {
+                "name": "Gender"
+            }
+        ]
+        const categories = await Promise.all(categoriesToCreate.map(createCategory))
+    
+        console.log("Categories created: ", categories)
+        console.log("Finished creating categories!")
+    } catch (error) {
+        console.error("Error creating categories!")
+        throw error
+    }
+}
+
 async function rebuildDB() {
     try {
         await dropTables()
         await createTables()
         await createInitialUsers()
-        // await createInitialBillingAddresses()
-        // await createInitialShippingAddresses()
         await createInitialAdmins()
         await createInitialOrders()
         await createInitialPuppies()
         await createInitialCarts()
+        await createInitialCategories()
     } catch (error) {
         console.log("Error during rebuildDB")
         throw error
