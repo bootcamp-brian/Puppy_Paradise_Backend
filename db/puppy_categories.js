@@ -18,6 +18,20 @@ async function addPuppyToCategory({
     }
 }
 
+async function getCategoriesOfPuppy(puppyId) {
+    try{
+        const { rows } = await client.query(`
+            SELECT *
+            FROM puppy_categories
+            WHERE "puppyId"= $1;
+        `, [puppyId])
+
+        return rows;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function getPuppiesByCategory({ categoryId }) {
     try{
         const { rows } = await client.query(`
@@ -51,4 +65,5 @@ module.exports = {
     addPuppyToCategory,
     getPuppiesByCategory,
     deletePuppyFromCategory,
+    getCategoriesOfPuppy
 };

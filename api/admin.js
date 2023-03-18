@@ -26,7 +26,8 @@ const {
     deleteCategory,
     getAllPuppies,
     updateShippingAddress,
-    updateBillingAddress
+    updateBillingAddress,
+    getCategoriesOfPuppy
 } = require('../db');
 const { checkAdmin } = require("./utils");
 
@@ -334,6 +335,19 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
 })
 
 // --- Admin functionality for puppies ---
+
+// GET /api/admin/puppies/categories/:puppyId
+// Shows all puppies (including unavailable ones)
+adminRouter.get('/puppies/categories/:puppyId', checkAdmin, async (req, res, next) => {
+    try {
+        const { puppyId } = req.params;
+        const categories = await getCategoriesOfPuppy();
+        
+        res.send(categories);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
 
 // GET /api/admin/puppies
 // Shows all puppies (including unavailable ones)
