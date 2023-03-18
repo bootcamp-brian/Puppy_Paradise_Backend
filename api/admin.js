@@ -341,8 +341,8 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
 adminRouter.get('/puppies/categories/:puppyId', checkAdmin, async (req, res, next) => {
     try {
         const { puppyId } = req.params;
-        const categories = await getCategoriesOfPuppy();
-        
+        const categories = await getCategoriesOfPuppy(puppyId);
+
         res.send(categories);
     } catch ({ error, name, message }) {
         next({ error, name, message });
