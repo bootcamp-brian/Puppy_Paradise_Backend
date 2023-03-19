@@ -36,6 +36,9 @@ const YOUR_DOMAIN = process.env.SITE_DOMAIN || 'http://localhost:3000';
 
 router.post('/create-checkout-session', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', YOUR_DOMAIN);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     const { cartItems } = req.body;
     
     const line_items = cartItems.map(item => {
@@ -66,8 +69,8 @@ router.post('/create-checkout-session', async (req, res) => {
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
 
-    res.send({session});
-    // res.redirect(303, session.url);
+    // res.send({session});
+    res.redirect(303, session.url);
 });
 
 // error handling middleware
