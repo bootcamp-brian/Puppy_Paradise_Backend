@@ -23,7 +23,7 @@ async function getCategoriesOfPuppy(puppyId) {
         const { rows } = await client.query(`
             SELECT *
             FROM puppy_categories
-            WHERE "puppyId"= $1;
+            WHERE "puppyId"=$1;
         `, [puppyId])
 
         return rows;

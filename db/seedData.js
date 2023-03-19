@@ -6,7 +6,7 @@ const {
     createOrder,
     addItemToCart,
     createCategory,
-    addPuppyToOrder
+    addPuppyToOrder,
     addPuppyToCategory
 } = require('./');
 const client = require("./client");
@@ -200,7 +200,8 @@ async function createInitialUsers() {
                     "state": "TN",
                     "zip": 61556
                 }
-            },{ 
+            },
+            { 
                 "firstName": "brian", 
                 "lastName": "mui", 
                 "email": "bmui@live.com", 
@@ -218,7 +219,8 @@ async function createInitialUsers() {
                     "state": "OH",
                     "zip": 10527
                 }
-            },{ 
+            },
+            { 
                 "firstName": "andreea",
                 "lastName": "merloiu", 
                 "email": "amerloiu@live.com", 
@@ -236,7 +238,8 @@ async function createInitialUsers() {
                     "state": "NC",
                     "zip": 28689
                 } 
-            },{
+            },
+            {
                 "firstName": "Shurwood",
                 "lastName": "Livingstone",
                 "email": "slivingstone0@mozilla.org",
@@ -254,7 +257,8 @@ async function createInitialUsers() {
                     "state": "HI",
                     "zip": 41800
                 }
-            }, {
+            },
+            {
                 "firstName": "Jerrold",
                 "lastName": "Bicksteth",
                 "email": "jbicksteth1@auda.org.au",
@@ -272,7 +276,8 @@ async function createInitialUsers() {
                     "state": "CA",
                     "zip": 30468
                 }
-            }, {
+            },
+            {
                 "firstName": "Jordain",
                 "lastName": "Finlow",
                 "email": "jfinlow2@ftc.gov",
@@ -290,7 +295,8 @@ async function createInitialUsers() {
                     "state": "CO",
                     "zip": 42996
                 }
-            }, {
+            },
+            {
                 "firstName": "Riannon",
                 "lastName": "Bernakiewicz",
                 "email": "rbernakiewicz3@independent.co.uk",
@@ -308,7 +314,8 @@ async function createInitialUsers() {
                     "state": "FL",
                     "zip": 24844
                 }
-            }, {
+            },
+            {
                 "firstName": "Issiah",
                 "lastName": "Morot",
                 "email": "imorot4@gmpg.org",
@@ -326,7 +333,8 @@ async function createInitialUsers() {
                     "state": "CA",
                     "zip": 84015
                 }
-            }, {
+            },
+            {
                 "firstName": "Thorny",
                 "lastName": "Sipson",
                 "email": "tsipson5@yellowpages.com",
@@ -344,7 +352,8 @@ async function createInitialUsers() {
                     "state": "VA",
                     "zip": 42223
                 }
-            }, {
+            },
+            {
                 "firstName": "Demetri",
                 "lastName": "Ralls",
                 "email": "dralls6@statcounter.com",
@@ -362,7 +371,8 @@ async function createInitialUsers() {
                     "state": "FL",
                     "zip": 24844
                 }
-            }, {
+            },
+            {
                 "firstName": "Rufe",
                 "lastName": "Ensor",
                 "email": "rensor7@bizjournals.com",
@@ -380,7 +390,8 @@ async function createInitialUsers() {
                     "state": "PA",
                     "zip": 58910
                 }
-            }, {
+            },
+            {
                 "firstName": "Dodie",
                 "lastName": "Templeton",
                 "email": "dtempleton8@drupal.org",
@@ -398,7 +409,8 @@ async function createInitialUsers() {
                     "state": "IL",
                     "zip": 84637
                 }
-            }, {
+            },
+            {
                 "firstName": "Rene",
                 "lastName": "Robard",
                 "email": "rrobard9@addthis.com",
@@ -416,7 +428,8 @@ async function createInitialUsers() {
                     "state": "CT",
                     "zip": 27428
                 }
-            }, {
+            },
+            {
                 "firstName": "Korie",
                 "lastName": "Peltzer",
                 "email": "kpeltzera@prnewswire.com",
@@ -434,7 +447,8 @@ async function createInitialUsers() {
                     "state": "TX",
                     "zip": 42128
                 }
-            }, {
+            },
+            {
                 "firstName": "Reinaldo",
                 "lastName": "Brandt",
                 "email": "rbrandtb@merriam-webster.com",
