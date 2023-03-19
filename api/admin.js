@@ -557,8 +557,11 @@ adminRouter.delete('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
                 message: 'Puppy not found'
             })
         } else {
-            const deletedPuppy = await deletePuppy(puppyId);
-            res.send(deletedPuppy)
+            await deletePuppy(puppyId);
+            res.send({
+                success: true,
+                message: 'Puppy marked as unavailable.'
+            })
         }
     } catch ({ error, name, message }) {
         next({ error, name, message });

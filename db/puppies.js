@@ -98,8 +98,7 @@ async function deletePuppy(id) {
         await client.query(`
             UPDATE puppies
             SET "isAvailable"=${false}
-            WHERE "id"=$1
-            RETURNING *;
+            WHERE "id"=$1;
         `, [id])
 
     } catch (error) {
