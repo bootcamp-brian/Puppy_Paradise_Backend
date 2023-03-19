@@ -35,7 +35,6 @@ const stripe = require('stripe')('sk_test_51MnTRwC3qhij2vZlCUNW9BmfKG2Uop8Lu2c9o
 const YOUR_DOMAIN = process.env.SITE_DOMAIN || 'http://localhost:3000';
 
 router.post('/create-checkout-session', async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', YOUR_DOMAIN);
     const { cartItems } = req.body;
     
     const line_items = cartItems.map(item => {
@@ -61,7 +60,7 @@ router.post('/create-checkout-session', async (req, res) => {
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
 
-    res.redirect(303, session.url);
+    res.send({session});
 });
 
 // error handling middleware
