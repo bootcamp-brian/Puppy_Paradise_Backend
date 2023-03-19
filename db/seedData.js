@@ -6,6 +6,7 @@ const {
     createOrder,
     addItemToCart,
     createCategory,
+    addPuppyToOrder
     addPuppyToCategory
 } = require('./');
 const client = require("./client");
@@ -495,22 +496,45 @@ async function createInitialOrders() {
                 "userId": brian.id,
                 "date": "2023-01-22 13:34:24",
                 "status": "Processing",
-                "total": 1111.11
+                "total": 250.99
               }, {
                 "userId": users[1].id,
                 "date": "2022-12-04 11:03:27",
-                "status": "Completed"
+                "status": "Completed",
+                "total": 360.99
               }, {
                 "userId": users[2].id,
                 "date": "2022-07-19 22:17:57",
-                "status": "Cancelled"
+                "status": "Cancelled",
+                "total": 280.99
               }, {
                 "userId": users[3].id,
                 "date": "2023-03-03 18:17:28",
-                "status": "Created"
+                "status": "Created",
+                "total": 210.99
               }
         ]
-        const orders = await Promise.all(ordersToCreate.map(createOrder))
+        await createOrder(ordersToCreate[0])
+        await createOrder(ordersToCreate[1])
+        await createOrder(ordersToCreate[2])
+        await createOrder(ordersToCreate[3])
+
+        await addPuppyToOrder({
+            orderId:1,
+            puppyId:1
+        })
+        await addPuppyToOrder({
+            orderId:2,
+            puppyId:2
+        })
+        await addPuppyToOrder({
+            orderId:3,
+            puppyId:3
+        })
+        await addPuppyToOrder({
+            orderId:4,
+            puppyId:4
+        })
     
         console.log("Orders created: ", orders)
         console.log("Finished creating orders!")
@@ -522,7 +546,80 @@ async function createInitialOrders() {
 
 async function createInitialPuppies() {
     console.log("Starting to create puppies...")
-    try {    
+    try {
+        const jinny = {
+            "name": "Jinny",
+            "image1": "https://images.dog.ceo/breeds/chihuahua/marto.jpg",
+            "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_8578.jpg",
+            "description": "Jinny is a sweet and sassy senior Chihuahua. She is approximately 10 years old and weighs nine pounds.",
+            "age": 120,
+            "breed": "Chihuahua Mix",
+            "weight": 9,
+            "size": "S",
+            "pedigree": false,
+            "isVaccinated": true,
+            "isAltered": true,
+            "gender": "Female",
+            "isAvailable": false,
+            "price": 250.99
+        }
+
+        const loretta = {
+            "name": "Loretta",
+            "image1": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_13858.jpg",
+            "image2": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_3762.jpg",
+            "description": "Meet Loretta. She is the type of well-balanced dog that spoils pet owners. Loretta is energetic without being rambunctious, an extrovert who also loves her “me time,” and is food motivated in a way that does not lead to her hunting around for other treats.",
+            "age": 84,
+            "breed": "Pit Bull Terrier",
+            "weight": 74,
+            "size": "L",
+            "pedigree": false,
+            "isVaccinated": true,
+            "isAltered": true,
+            "gender": "Female",
+            "isAvailable": false,
+            "price": 360.99
+        }
+
+        const carlisle = {
+            "name": "Carlisle",
+            "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_2479.jpg",
+            "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_1862.jpg",
+            "description": "Carlisle is a darling boy. He is gently and sweet with not a mean bone in his body. He is good with people, dogs and cats.",
+            "age": 60,
+            "breed": "Chihuahua",
+            "weight": 15,
+            "size": "S",
+            "pedigree": false,
+            "isVaccinated": true,
+            "isAltered": true,
+            "gender": "Male",
+            "isAvailable": false,
+            "price": 280.99
+        }
+
+        const rainbow = {
+            "name": "Rainbow",
+            "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_1133.jpg",
+            "image2": "https://images.dog.ceo/breeds/collie-border/n02106166_331.jpg",
+            "description": "Meet Rainbow! Rainbow is the sweetest little short stack! He's approximately 15-years old and 30-lbs, and being low to the ground makes it easy for him to flop over for belly rubs. He loves going on walks, car rides, and just spending his day with you. He's the ultimate little buddy!",
+            "age": 180,
+            "breed": "Border Collie Mix",
+            "weight": 30,
+            "size": "M",
+            "pedigree": false,
+            "isVaccinated": true,
+            "isAltered": true,
+            "gender": "Male",
+            "isAvailable": false,
+            "price": 210.99
+        }
+
+        await createPuppy(jinny)
+        await createPuppy(loretta)
+        await createPuppy(carlisle)
+        await createPuppy(rainbow)
+
         const puppiesToCreate = [
             {
                 "name": "Jack",
@@ -629,22 +726,7 @@ async function createInitialPuppies() {
                 "gender": "Female",
                 "isAvailable": true,
                 "price": 990.99
-            }, {
-                "name": "Jinny",
-                "image1": "https://images.dog.ceo/breeds/chihuahua/marto.jpg",
-                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_8578.jpg",
-                "description": "Jinny is a sweet and sassy senior Chihuahua. She is approximately 10 years old and weighs nine pounds.",
-                "age": 120,
-                "breed": "Chihuahua Mix",
-                "weight": 9,
-                "size": "S",
-                "pedigree": false,
-                "isVaccinated": true,
-                "isAltered": true,
-                "gender": "Female",
-                "isAvailable": false,
-                "price": 250.99
-            }, {
+            },  {
                 "name": "Remi",
                 "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_3942.jpg",
                 "image2": null,
@@ -675,36 +757,6 @@ async function createInitialPuppies() {
                 "isAvailable": true,
                 "price": 388.99
             }, {
-                "name": "Loretta",
-                "image1": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_13858.jpg",
-                "image2": "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_3762.jpg",
-                "description": "Meet Loretta. She is the type of well-balanced dog that spoils pet owners. Loretta is energetic without being rambunctious, an extrovert who also loves her “me time,” and is food motivated in a way that does not lead to her hunting around for other treats.",
-                "age": 84,
-                "breed": "Pit Bull Terrier",
-                "weight": 74,
-                "size": "L",
-                "pedigree": false,
-                "isVaccinated": true,
-                "isAltered": true,
-                "gender": "Female",
-                "isAvailable": false,
-                "price": 360.99
-            }, {
-                "name": "Carlisle",
-                "image1": "https://images.dog.ceo/breeds/chihuahua/n02085620_2479.jpg",
-                "image2": "https://images.dog.ceo/breeds/chihuahua/n02085620_1862.jpg",
-                "description": "Carlisle is a darling boy. He is gently and sweet with not a mean bone in his body. He is good with people, dogs and cats.",
-                "age": 60,
-                "breed": "Chihuahua",
-                "weight": 15,
-                "size": "S",
-                "pedigree": false,
-                "isVaccinated": true,
-                "isAltered": true,
-                "gender": "Male",
-                "isAvailable": false,
-                "price": 280.99
-            }, {
                 "name": "Floofy",
                 "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_476.jpg",
                 "image2": null,
@@ -719,21 +771,6 @@ async function createInitialPuppies() {
                 "gender": "Male",
                 "isAvailable": true,
                 "price": 415.99
-            }, {
-                "name": "Rainbow",
-                "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_1133.jpg",
-                "image2": "https://images.dog.ceo/breeds/collie-border/n02106166_331.jpg",
-                "description": "Meet Rainbow! Rainbow is the sweetest little short stack! He's approximately 15-years old and 30-lbs, and being low to the ground makes it easy for him to flop over for belly rubs. He loves going on walks, car rides, and just spending his day with you. He's the ultimate little buddy!",
-                "age": 180,
-                "breed": "Border Collie Mix",
-                "weight": 30,
-                "size": "M",
-                "pedigree": false,
-                "isVaccinated": true,
-                "isAltered": true,
-                "gender": "Male",
-                "isAvailable": false,
-                "price": 210.99
             }, {
                 "name": "Abby",
                 "image1": "https://images.dog.ceo/breeds/collie-border/n02106166_2685.jpg",
@@ -1021,8 +1058,8 @@ async function rebuildDB() {
         await createTables()
         await createInitialUsers()
         await createInitialAdmins()
-        await createInitialOrders()
         await createInitialPuppies()
+        await createInitialOrders()
         await createInitialCarts()
         await createInitialCategories()
     } catch (error) {
