@@ -550,7 +550,6 @@ async function createInitialOrders() {
             puppyId:4
         })
     
-        console.log("Orders created: ", orders)
         console.log("Finished creating orders!")
     } catch (error) {
         console.error("Error creating orders!")
@@ -954,7 +953,6 @@ async function createInitialPuppies() {
         ]
         const puppies = await Promise.all(puppiesToCreate.map(createPuppy))
     
-        console.log("Puppies created: ", puppies)
         console.log("Finished creating puppies!")
     } catch (error) {
         console.error("Error creating puppies!")
