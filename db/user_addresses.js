@@ -51,15 +51,14 @@ async function updateShippingAddress (userId, shippingAddress) {
         if (setString.length === 0) {
             return;
         }
-    
-        const { rows: [ shippingAddress ] } = await client.query(`
+        
+        const { rows: [ updatedShippingAddress ] } = await client.query(`
             UPDATE shipping_addresses
             SET ${ setString }
             WHERE "userId"=${ userId }
             RETURNING *;
         `, Object.values(shippingAddress));
-    
-        return shippingAddress;
+        return updatedShippingAddress;
       } catch (error) {
         console.error(error)
     }
@@ -76,14 +75,14 @@ async function updateBillingAddress (userId, billingAddress) {
             return;
         }
     
-        const { rows: [ billingAddress ] } = await client.query(`
+        const { rows: [ updatedBillingAddress ] } = await client.query(`
             UPDATE billing_addresses
             SET ${ setString }
             WHERE "userId"=${ userId }
             RETURNING *;
         `, Object.values(billingAddress));
     
-        return billingAddress;
+        return updatedBillingAddress;
       } catch (error) {
         console.error(error)
     }

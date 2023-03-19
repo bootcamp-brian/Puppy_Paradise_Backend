@@ -7,6 +7,7 @@ const {
     addItemToCart,
     createCategory,
     addPuppyToOrder
+    addPuppyToCategory
 } = require('./');
 const client = require("./client");
 const { getAllUsers, getUserByEmail } = require('./users');
@@ -159,26 +160,29 @@ async function createTables() {
 async function createInitialUsers() {
     console.log("Starting to create users...")
     try {
+        const guest = { 
+            "firstName": "guest",
+            "lastName": "guest",
+            "email": "guest",
+            "password": "guest",
+            "phone": "guest",
+            "shippingAddress": {
+                "address": "guest",
+                "city": "guest",
+                "state": "guest",
+                "zip": 0
+            },
+            "billingAddress": {
+                "address": "guest",
+                "city": "guest",
+                "state": "guest",
+                "zip": 0
+            }
+        }
+        const createdGuest = await createUser(guest);
+
         const usersToCreate = [
             { 
-                "firstName": "guest",
-                "lastName": "guest",
-                "email": "guest",
-                "password": "guest",
-                "phone": "guest",
-                "shippingAddress": {
-                    "address": "guest",
-                    "city": "guest",
-                    "state": "guest",
-                    "zip": 0
-                },
-                "billingAddress": {
-                    "address": "guest",
-                    "city": "guest",
-                    "state": "guest",
-                    "zip": 0
-                }
-            },{ 
                 "firstName": "demi",
                 "lastName": "zayas",
                 "email": "dzayas@live.com",
@@ -978,24 +982,69 @@ async function createInitialCarts() {
 async function createInitialCategories() {
     console.log("Starting to create categories...")
     try {
-        const categoriesToCreate = [
-            {
-                "name": "Size"
-            }, {
-                "name": "Breed"
-            }, {
-                "name": "Pedigree"
-            }, {
-                "name": "Vaccinated"
-            }, {
-                "name": "Neutered"
-            }, {
-                "name": "Gender"
+        // const categoriesToCreate = [
+        //     "Small",
+        //     "Medium",
+        //     "Large",
+        //     "Extra Large",
+        //     "Male",
+        //     "Female",
+        //     "Spayed",
+        //     "Neutered",
+        //     "Vaccinated"
+        // ]
+        // const categories = await Promise.all(categoriesToCreate.map(createCategory))
+        
+        await createCategory("Small");
+        await createCategory("Medium");
+        await createCategory("Large");
+        await createCategory("Extra Large");
+        await createCategory("Male");
+        await createCategory("Female");
+        await createCategory("Spayed");
+        await createCategory("Neutered");
+        await createCategory("Vaccinated");
+        await createCategory("Pedigreed");
+        
+        const map = {
+            "S": 1,
+            "M": 2,
+            "L": 3,
+            "XL": 4,
+            "Male": 5,
+            "Female": 6,
+            "Spayed": 7,
+            "Neutered": 8,
+            "Vaccinated": 9,
+            "Pedigreed": 10
+        }
+        
+        const puppies = await getAllPuppies();
+
+        for (let puppy of puppies) {
+            if (map[puppy.size]) {
+                await addPuppyToCategory({ categoryId: map[puppy.size], puppyId: puppy.id});
+                
             }
-        ]
-        const categories = await Promise.all(categoriesToCreate.map(createCategory))
-    
-        console.log("Categories created: ", categories)
+            if (map[puppy.gender]) {
+                await addPuppyToCategory({ categoryId: map[puppy.gender], puppyId: puppy.id});
+            }
+            if (puppy.isAltered) {
+                if (puppy.gender === "Female") {
+                    await addPuppyToCategory({ categoryId: 7, puppyId: puppy.id});
+                } else {
+                    await addPuppyToCategory({ categoryId: 8, puppyId: puppy.id});
+                }
+            }
+            if (puppy.isVaccinated) {
+                await addPuppyToCategory({ categoryId: 9, puppyId: puppy.id});
+            }
+            if (puppy.pedigree) {
+                await addPuppyToCategory({ categoryId: 10, puppyId: puppy.id});
+            }
+        }
+        
+        // console.log("Categories created: ", categories)
         console.log("Finished creating categories!")
     } catch (error) {
         console.error("Error creating categories!")

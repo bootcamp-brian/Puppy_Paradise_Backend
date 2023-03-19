@@ -24,7 +24,10 @@ const {
     deleteInactiveUser,
     deletePuppyFromCategory,
     deleteCategory,
-    getAllPuppies
+    getAllPuppies,
+    updateShippingAddress,
+    updateBillingAddress,
+    getCategoriesOfPuppy
 } = require('../db');
 const { checkAdmin } = require("./utils");
 
@@ -132,7 +135,10 @@ adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => 
 adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const { ...fields } = req.body;
+        const userInfo = { ...req.body };
+
+        delete userInfo.shippingAddress;
+        delete userInfo.billingAddress;
 
         const user = await getUserById(userId);
 
@@ -156,7 +162,13 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
                     message: 'That email is already in use'
                 })
             } else {
-                const updatedUser = await updateUser({ id: userId, ...fields });
+                if (req.body.shippingAddress) {
+                    await updateShippingAddress(userId, req.body.shippingAddress);
+                }
+                if (req.body.billingAddress) {
+                    await updateBillingAddress(userId, req.body.billingAddress);
+                }
+                const updatedUser = await updateUser({ id: userId, ...userInfo });
     
                 if (!updatedUser) {
                     res.status(400);
@@ -170,7 +182,13 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
                 }
             }
         } else {
-            const updatedUser = await updateUser({ id: userId, ...fields });
+            if (req.body.shippingAddress) {
+                await updateShippingAddress(userId, req.body.shippingAddress);
+            }
+            if (req.body.billingAddress) {
+                await updateBillingAddress(userId, req.body.billingAddress);
+            }
+            const updatedUser = await updateUser({ id: userId, ...userInfo });
 
             if (!updatedUser) {
                 res.status(400);
@@ -317,6 +335,19 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
 })
 
 // --- Admin functionality for puppies ---
+
+// GET /api/admin/puppies/categories/:puppyId
+// Shows all puppies (including unavailable ones)
+adminRouter.get('/puppies/categories/:puppyId', checkAdmin, async (req, res, next) => {
+    try {
+        const { puppyId } = req.params;
+        const categories = await getCategoriesOfPuppy(puppyId);
+
+        res.send(categories);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
 
 // GET /api/admin/puppies
 // Shows all puppies (including unavailable ones)
