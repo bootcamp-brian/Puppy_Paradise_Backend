@@ -36,7 +36,7 @@ const YOUR_DOMAIN = 'https://puppy-paradise-api.onrender.com';
 
 router.post('/create-checkout-session', async (req, res) => {
     const { cartItems } = req.body;
-
+    
     const line_items = cartItems.map(item => {
         const line_item = {
             price_data: {
@@ -44,9 +44,9 @@ router.post('/create-checkout-session', async (req, res) => {
                 product_data: {
                     name: item.name,
                     description: item.breed,
-                    images: item.image1
+                    images: [item.image1, item.image2]
                 },
-                unit_amount_decimal: Number(item.price)
+                unit_amount_decimal: Number(item.price) * 100
             },
             quantity: 1,
         }
@@ -60,7 +60,7 @@ router.post('/create-checkout-session', async (req, res) => {
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
 
-    res.send(303, session, session.url);
+    res.redirect(303, session.url);
 });
 
 // error handling middleware
