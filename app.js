@@ -2,16 +2,6 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 
-// Setup your Middleware and API Router here
-const cors = require('cors');
-app.use(cors());
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-
-const apiRouter = require('./api');
-app.use('/api', apiRouter);
-
 // This is your test secret API key.
 const stripe = require('stripe')('sk_test_51MnTRwC3qhij2vZlCUNW9BmfKG2Uop8Lu2c9ov17mxxBf5EW4O1mvd9uKrlzW5CJo42ooGzIq2d5cyYlaG1pTbz8008PtPRdF3');
 app.use(express.static('public'));
@@ -46,5 +36,15 @@ app.post('/create-checkout-session', async (req, res) => {
 
     res.send(303, session.url);
 });
+
+// Setup your Middleware and API Router here
+const cors = require('cors');
+app.use(cors());
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+const apiRouter = require('./api');
+app.use('/api', apiRouter);
 
 module.exports = app;
