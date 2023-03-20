@@ -200,7 +200,7 @@ usersRouter.patch('/me', checkAuthorization, async (req, res, next) => {
         } else if (req.body.email) {
             const userByEmail = await getUserByEmail(req.body.email);
 
-            if (userByEmail && userByEmail.id !== userId) {
+            if (userByEmail && (userByEmail.id !== userId)) {
                 res.status(400);
                 next({
                     error: '400',

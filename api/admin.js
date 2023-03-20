@@ -154,7 +154,7 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
         if (req.body.email) {
             const userByEmail = await getUserByEmail(req.body.email);
 
-            if (userByEmail && userByEmail.id !== userId) {
+            if (userByEmail && (userByEmail.id !== userId)) {
                 res.status(403);
                 next({
                     error: '403',
