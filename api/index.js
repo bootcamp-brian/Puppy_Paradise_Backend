@@ -65,6 +65,7 @@ router.post('/create-checkout-session', async (req, res) => {
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
 
+    res.send({session, YOUR_DOMAIN})
     res.redirect(303, session.url);
 });
 
