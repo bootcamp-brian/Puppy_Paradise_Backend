@@ -57,7 +57,9 @@ router.post('/create-checkout-session', async (req, res) => {
         line_items,
         mode: 'payment',
         success_url: `${YOUR_DOMAIN}?success=true`,
-        cancel_url: `${YOUR_DOMAIN}?canceled=true`
+        cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+        billing_address_collection: 'required',
+        shipping_address_collection: {allowed_countries: ['US']},
     });
 
     res.send({session});
