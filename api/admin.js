@@ -134,7 +134,8 @@ adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => 
 // Lets admin edit a specific user's info
 adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const userInfo = { ...req.body };
 
         delete userInfo.shippingAddress;
@@ -153,7 +154,6 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
 
         if (req.body.email) {
             const userByEmail = await getUserByEmail(req.body.email);
-
             if (userByEmail && (userByEmail.id !== userId)) {
                 res.status(403);
                 next({

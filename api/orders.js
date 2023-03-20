@@ -8,7 +8,8 @@ const { checkAuthorization } = require("./utils");
 // Gets a specific order (must be an order that belongs to the logged in user)
 ordersRouter.get('/:orderId', checkAuthorization, async (req, res, next) => {
     try {
-        const { orderId } = req.params;
+        const params = req.params;
+        const orderId = Number(params.orderId);
         const { id: userId } = req.user;
 
         const order = await getOrderById(orderId);
