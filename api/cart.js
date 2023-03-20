@@ -4,11 +4,11 @@ const { getCartByUser, getCartItemById, deleteCartItem, getPuppyById, addItemToC
 const { checkAuthorization } = require("./utils");
 const stripe = require('stripe')('sk_test_51MnTRwC3qhij2vZlCUNW9BmfKG2Uop8Lu2c9ov17mxxBf5EW4O1mvd9uKrlzW5CJo42ooGzIq2d5cyYlaG1pTbz8008PtPRdF3');
 
-// GET /api/cart/stripe
+// GET /api/cart/stripe/:checkoutId
 // Gets stripe response
-cartRouter.get('/stripe', async (req, res, next) => {
+cartRouter.get('/stripe/:checkoutId', async (req, res, next) => {
     try {
-        const { checkoutId } = req.body;
+        const { checkoutId } = req.params;
         const session = await stripe.checkout.sessions.retrieve(
             checkoutId
         );
