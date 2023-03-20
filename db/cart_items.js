@@ -36,7 +36,7 @@ try{
 async function getCartByUser(userId) {
     try{
         const { rows } = await client.query(`
-            SELECT cart_items.*, puppies.name, puppies.price, puppies.image1, puppies."isAvailable"
+            SELECT cart_items.*, puppies.name, puppies.breed, puppies.price, puppies.image1, puppies."isAvailable"
             FROM cart_items
             JOIN puppies ON cart_items."puppyId"=puppies.id
             WHERE "userId"=$1;
