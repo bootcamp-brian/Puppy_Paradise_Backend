@@ -31,7 +31,7 @@ const adminRouter = require('./admin');
 router.use('/admin', adminRouter);
 
 const stripe = require('stripe')('sk_test_51MnTRwC3qhij2vZlCUNW9BmfKG2Uop8Lu2c9ov17mxxBf5EW4O1mvd9uKrlzW5CJo42ooGzIq2d5cyYlaG1pTbz8008PtPRdF3');
-const YOUR_DOMAIN = 'https://unique-truffle-f7b6ba.netlify.app/';
+const YOUR_DOMAIN = 'http://localhost:3000';
 
 router.post('/create-checkout-session', async (req, res) => {
     const { cartItems } = req.body;
@@ -59,8 +59,8 @@ router.post('/create-checkout-session', async (req, res) => {
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
 
-    res.send({session})
-    res.redirect(303, session.url);
+    res.send({session});
+    // res.redirect(303, session.url);
 });
 
 // error handling middleware
