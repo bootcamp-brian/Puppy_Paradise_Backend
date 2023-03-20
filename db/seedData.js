@@ -960,37 +960,6 @@ async function createInitialPuppies() {
     }
 }
 
-async function createInitialCarts() {
-    console.log("Starting to create carts...")
-    try {
-        const users = await getAllUsers();
-        const puppies = await getAllPuppies();
-        const brian = await getUserByEmail("bmui@live.com")
-        const cartsToCreate = [
-            {
-                "userId": brian.id,
-                "puppyId": puppies[0].id
-              }, {
-                "userId": users[1].id,
-                "puppyId": puppies[1].id
-              }, {
-                "userId": users[2].id,
-                "puppyId": puppies[2].id
-              }, {
-                "userId": users[3].id,
-                "puppyId": puppies[3].id
-              }
-        ]
-        const carts = await Promise.all(cartsToCreate.map(addItemToCart))
-    
-        console.log("Carts created: ", carts)
-        console.log("Finished creating carts!")
-    } catch (error) {
-        console.error("Error creating carts!")
-        throw error
-    }
-}
-
 async function createInitialCategories() {
     console.log("Starting to create categories...")
     try {
@@ -1072,7 +1041,6 @@ async function rebuildDB() {
         await createInitialAdmins()
         await createInitialPuppies()
         await createInitialOrders()
-        await createInitialCarts()
         await createInitialCategories()
     } catch (error) {
         console.log("Error during rebuildDB")
