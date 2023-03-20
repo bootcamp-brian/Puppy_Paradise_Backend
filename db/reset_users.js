@@ -16,18 +16,18 @@ async function createResetUser(userId) {
     }
 }
 
-// async function getAllResetUsers() {
-//     try{
-//         const { rows } = await client.query(`
-//             SELECT *
-//             FROM reset_users
-//         `);
+async function getAllResetUsers() {
+    try{
+        const { rows } = await client.query(`
+            SELECT *
+            FROM reset_users
+        `);
 
-//         return rows;
-//     } catch (error) {
-//         console.error(error)
-//     }
-// }
+        return rows;
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 async function getResetUserById(userId) {
     try{
@@ -87,7 +87,7 @@ async function deleteResetUser(userId, password) {
 
 module.exports = {
     createResetUser,
-    // getAllResetUsers,
+    getAllResetUsers,
     deleteResetUser,
     getResetUserById
 };

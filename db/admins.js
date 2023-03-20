@@ -29,18 +29,19 @@ async function getAdminById(userId) {
         console.error(error)
     }
 }
-// async function getAllAdmins() {
-//     try{
-//         const { rows } = await client.query(`
-//             SELECT *
-//             FROM admins
-//         `);
 
-//         return rows;
-//     } catch (error) {
-//         console.error(error)
-//     }
-// }
+async function getAllAdmins() {
+    try{
+        const { rows } = await client.query(`
+            SELECT *
+            FROM admins
+        `);
+
+        return rows;
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 // async function deleteAdmin(id) {
 //     try{
@@ -58,7 +59,7 @@ async function getAdminById(userId) {
 
 module.exports = {
     createAdmin,
-    getAdminById
-    // getAllAdmins,
+    getAdminById,
+    getAllAdmins,
     // deleteAdmin
 };

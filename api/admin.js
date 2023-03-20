@@ -27,17 +27,28 @@ const {
     getAllPuppies,
     updateShippingAddress,
     updateBillingAddress,
-    getCategoriesOfPuppy
+    getCategoriesOfPuppy,
+    getAllAdmins,
+    getAllResetUsers
 } = require('../db');
 const { checkAdmin } = require("./utils");
 
-// Checks if the user is an admin before running any of the below routes
-// alternative to putting checkAdmin in each route
-// adminRouter.use('/', checkAdmin)
-
 // --- Admin functionality for users ---
 
+// GET /api/admin/resetusers
+// Lets admin view admins
+adminRouter.get('/resetusers', checkAdmin, async (req, res, next) => {
+    try {
+        const resetUsers = await getAllResetUsers();
+
+        res.send(resetUsers);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
 // GET /api/admin/users/inactive
+// Lets admin view inactive users
 adminRouter.get('/users/inactive', checkAdmin, async (req, res, next) => {
     try {
         const inactiveUsers = await getAllInactiveUsers();
@@ -77,6 +88,18 @@ adminRouter.get('/users', checkAdmin, async (req, res, next) => {
         const users = await getAllUsers();
 
         res.send(users);
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    } 
+})
+
+// GET /api/admin/
+// Lets admin view admins
+adminRouter.get('/', checkAdmin, async (req, res, next) => {
+    try {
+        const admins = await getAllAdmins();
+
+        res.send(admins);
     } catch ({ error, name, message }) {
         next({ error, name, message });
     } 
