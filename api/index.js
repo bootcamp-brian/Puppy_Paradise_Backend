@@ -57,13 +57,10 @@ router.post('/create-checkout-session', async (req, res) => {
         line_items,
         mode: 'payment',
         success_url: `${YOUR_DOMAIN}?success=true`,
-        cancel_url: `${YOUR_DOMAIN}?canceled=true`,
-        shipping_address_collection: ['US'],
-        billing_address_collection: 'auto'
+        cancel_url: `${YOUR_DOMAIN}?canceled=true`
     });
 
     res.send({session});
-    // res.redirect(303, session.url);
 });
 
 // error handling middleware

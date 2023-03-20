@@ -2,6 +2,22 @@ const express = require("express");
 const cartRouter = express.Router();
 const { getCartByUser, getCartItemById, deleteCartItem, getPuppyById, addItemToCart, deleteCart } = require('../db');
 const { checkAuthorization } = require("./utils");
+const stripe = require('stripe')('sk_test_51MnTRwC3qhij2vZlCUNW9BmfKG2Uop8Lu2c9ov17mxxBf5EW4O1mvd9uKrlzW5CJo42ooGzIq2d5cyYlaG1pTbz8008PtPRdF3');
+
+// GET /api/cart/stripe
+// Gets stripe response
+cartRouter.get('/stripe', async (req, res, next) => {
+    try {
+        const { checkoutId } = req.body;
+        const session = await stripe.checkout.sessions.retrieve(
+            checkoutId
+        );
+        
+        res.send({session});
+    } catch ({ error, name, message }) {
+        next({ error, name, message });
+    }
+})
 
 // GET /api/cart
 // Gets a logged in user's cart
