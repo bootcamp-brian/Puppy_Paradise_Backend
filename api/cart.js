@@ -46,7 +46,8 @@ cartRouter.get('/', checkAuthorization, async (req, res, next) => {
 cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
-        const { puppyId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
         const puppy = await getPuppyById(puppyId);
 
         if (puppy.isAvailable) {
@@ -70,7 +71,8 @@ cartRouter.patch('/puppies/:puppyId', checkAuthorization, async (req, res, next)
 // Removes an item from the logged in user's cart
 cartRouter.delete('/:cartItemId', checkAuthorization, async (req, res, next) => {
     try {
-        const { cartItemId } = req.params;
+        const params = req.params;
+        const cartItemId = Number(params.cartItemId);
         const cartItem = await getCartItemById(cartItemId);
 
         if (cartItem.id) {

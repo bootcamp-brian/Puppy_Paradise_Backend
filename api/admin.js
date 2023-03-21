@@ -63,7 +63,8 @@ adminRouter.get('/users/inactive', checkAdmin, async (req, res, next) => {
 // Lets admin view specific user
 adminRouter.get('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const user = await getUserById(userId);
 
         if (!user) {
@@ -109,7 +110,8 @@ adminRouter.get('/', checkAdmin, async (req, res, next) => {
 // Lets admin promote a specific user to admin status
 adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const user = await getUserById(userId);
 
         if (!user) {
@@ -233,7 +235,8 @@ adminRouter.patch('/users/:userId', checkAdmin, async (req, res, next) => {
 // Lets admin reactivate an inactive user
 adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const user = await getUserById(userId);
 
         if (!user) {
@@ -256,7 +259,8 @@ adminRouter.post('/users/reactivate/:userId', checkAdmin, async (req, res, next)
 // Lets admin mark a specific user as inactive
 adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const user = await getUserById(userId);
 
         if (!user) {
@@ -281,7 +285,8 @@ adminRouter.delete('/users/:userId', checkAdmin, async (req, res, next) => {
 // Lets admin view a specific user's orders
 adminRouter.get('/orders/users/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
         const user = await getUserById(userId);
 
         if (!user) {
@@ -304,7 +309,8 @@ adminRouter.get('/orders/users/:userId', checkAdmin, async (req, res, next) => {
 // Lets admin view a specific order
 adminRouter.get('/orders/:orderId', checkAdmin, async (req, res, next) => {
     try {
-        const { orderId } = req.params;
+        const params = req.params;
+        const orderId = Number(params.orderId);
         const order = await getOrderById(orderId);
 
         if (!order) {
@@ -337,7 +343,8 @@ adminRouter.get('/orders', checkAdmin, async (req, res, next) => {
 // Lets admin update a specific order's status
 adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) => {
     try {
-        const { orderId } = req.params;
+        const params = req.params;
+        const orderId = Number(params.orderId);
         const { status } = req.body;
         const order = await getOrderById(orderId);
 
@@ -363,7 +370,8 @@ adminRouter.patch('/orders/status/:orderId', checkAdmin, async (req, res, next) 
 // Shows all puppies (including unavailable ones)
 adminRouter.get('/puppies/categories/:puppyId', checkAdmin, async (req, res, next) => {
     try {
-        const { puppyId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
         const categories = await getCategoriesOfPuppy(puppyId);
 
         res.send(categories);
@@ -506,7 +514,8 @@ adminRouter.post('/puppies', checkAdmin, async (req, res, next) => {
 // Lets admin update a specific puppy's info
 adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
     try {
-        const { puppyId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
         const { ...fields } = req.body;
 
         const puppy = await getPuppyById(puppyId);
@@ -541,7 +550,8 @@ adminRouter.patch('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
 // Lets admin delete a category
 adminRouter.delete('/puppies/categories/:categoryId', checkAdmin, async (req, res, next) => {
     try {
-        const { categoryId } = req.params;
+        const params = req.params;
+        const categoryId = Number(params.categoryId);
 
         const deletedCategory = await deleteCategory(categoryId);
         res.send(deletedCategory)
@@ -555,7 +565,9 @@ adminRouter.delete('/puppies/categories/:categoryId', checkAdmin, async (req, re
 // Lets admin remove a puppy from a category
 adminRouter.delete('/puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, async (req, res, next) => {
     try {
-        const { puppyId, categoryId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
+        const categoryId = Number(params.categoryId);
 
         const deletedPuppy = await deletePuppyFromCategory(puppyId, categoryId);
         res.send(deletedPuppy)
@@ -569,7 +581,8 @@ adminRouter.delete('/puppies/tagged_puppies/:puppyId/:categoryId', checkAdmin, a
 // Lets admin mark a puppy as unavailable (which should remove it from storefront)
 adminRouter.delete('/puppies/:puppyId', checkAdmin, async (req, res, next) => {
     try {
-        const { puppyId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
         const puppy = await getPuppyById(puppyId);
 
         if (!puppy) {

@@ -31,7 +31,8 @@ puppiesRouter.get('/tagged_puppies/:categoryId', async (req, res, next) => {
 // Gets specific puppy
 puppiesRouter.get('/:puppyId', async (req, res, next) => {
     try {
-        const { puppyId } = req.params;
+        const params = req.params;
+        const puppyId = Number(params.puppyId);
         const puppy = await getPuppyById(puppyId);
 
         if (!puppy) {

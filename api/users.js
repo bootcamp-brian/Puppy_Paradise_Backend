@@ -132,7 +132,8 @@ usersRouter.post('/login', async (req, res, next) => {
 usersRouter.delete('/password_reset/:userId', async (req, res, next) => {
     try {
         const { password } = req.body;
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId);
 
         const user = await deleteResetUser(userId, password);
 
