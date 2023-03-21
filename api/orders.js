@@ -64,6 +64,24 @@ ordersRouter.post('/guest', async (req, res, next) => {
                 message: 'Your cart is empty'
             })
         }
+        
+        const userOrders = getOrdersByUser({ id: 1 });
+        let orderExists = false;
+        for (let order of userOrders) {
+            if ((order.userId === userId) && (order.date === date)) {
+                orderExists = true;
+                break;
+            }
+        }
+
+        if (orderExists) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'OrderCreationError',
+                message: 'Unable to create order'
+            })
+        }
 
         let total = 0;
         for (let item of orderItems) {
@@ -110,8 +128,25 @@ ordersRouter.post('/guest', async (req, res, next) => {
 ordersRouter.post('/', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
-
         const { date } = req.body;
+        const userOrders = getOrdersByUser({ id: userId });
+        let orderExists = false;
+        for (let order of userOrders) {
+            if ((order.userId === userId) && (order.date === date)) {
+                orderExists = true;
+                break;
+            }
+        }
+
+        if (orderExists) {
+            res.status(400);
+            next({
+                error: '400',
+                name: 'OrderCreationError',
+                message: 'Unable to create order'
+            })
+        }
+
         const orderItems = await getCartByUser(userId);
 
         if (!orderItems[0]) {
