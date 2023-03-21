@@ -65,7 +65,7 @@ ordersRouter.post('/guest', async (req, res, next) => {
             })
         }
         
-        const userOrders = getOrdersByUser({ id: 1 });
+        const userOrders = await getOrdersByUser({ id: 1 });
         let orderExists = false;
         for (let order of userOrders) {
             if ((order.userId === userId) && (order.date === date)) {
@@ -129,7 +129,8 @@ ordersRouter.post('/', checkAuthorization, async (req, res, next) => {
     try {
         const { id: userId } = req.user;
         const { date } = req.body;
-        const userOrders = getOrdersByUser({ id: userId });
+        
+        const userOrders = await getOrdersByUser({ id: userId });
         let orderExists = false;
         for (let order of userOrders) {
             if ((order.userId === userId) && (order.date === date)) {
