@@ -133,7 +133,8 @@ adminRouter.patch('/users/promote/:userId', checkAdmin, async (req, res, next) =
 // Lets admin set a specific user to require a password reset
 adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const params = req.params;
+        const userId = Number(params.userId)
         const user = await getUserById(userId);
 
         if (!user) {
@@ -144,8 +145,7 @@ adminRouter.patch('/users/reset/:userId', checkAdmin, async (req, res, next) => 
                 message: 'User not found'
             })
         } else {
-            // need a function that adds a row to reset_users table using the userId parameter to fill in the "userId" column
-            const targetUser = await createResetUser(userId);
+             const targetUser = await createResetUser(userId);
             res.send(targetUser);
         }
     } catch ({ error, name, message }) {
